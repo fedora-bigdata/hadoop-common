@@ -46,7 +46,7 @@ import org.apache.hadoop.hdfs.server.common.JspHelper;
 import org.apache.hadoop.net.NetUtils;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mortbay.jetty.InclusiveByteRange;
+import org.eclipse.jetty.server.InclusiveByteRange;
 
 /*
  * Mock input stream class that always outputs the current position of the stream. 

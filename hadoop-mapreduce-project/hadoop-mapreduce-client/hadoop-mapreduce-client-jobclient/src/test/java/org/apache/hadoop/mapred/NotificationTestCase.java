@@ -18,9 +18,9 @@
 
 package org.apache.hadoop.mapred;
 
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.servlet.Context;
-import org.mortbay.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.io.Text;
@@ -69,7 +69,7 @@ public abstract class NotificationTestCase extends HadoopTestCase {
     }
     webServer = new Server(0);
 
-    Context context = new Context(webServer, contextPath);
+    ServletContextHandler context = new ServletContextHandler(webServer, contextPath);
 
     // create servlet handler
     context.addServlet(new ServletHolder(new NotificationServlet()),

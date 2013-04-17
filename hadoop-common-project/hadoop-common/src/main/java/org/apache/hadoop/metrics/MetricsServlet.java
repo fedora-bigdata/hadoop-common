@@ -36,8 +36,8 @@ import org.apache.hadoop.http.HttpServer;
 import org.apache.hadoop.metrics.spi.OutputRecord;
 import org.apache.hadoop.metrics.spi.AbstractMetricsContext.MetricMap;
 import org.apache.hadoop.metrics.spi.AbstractMetricsContext.TagMap;
-import org.mortbay.util.ajax.JSON;
-import org.mortbay.util.ajax.JSON.Output;
+import org.eclipse.jetty.util.ajax.JSON;
+import org.eclipse.jetty.util.ajax.JSON.Output;
 
 /**
  * A servlet to print out metrics data.  By default, the servlet returns a 
