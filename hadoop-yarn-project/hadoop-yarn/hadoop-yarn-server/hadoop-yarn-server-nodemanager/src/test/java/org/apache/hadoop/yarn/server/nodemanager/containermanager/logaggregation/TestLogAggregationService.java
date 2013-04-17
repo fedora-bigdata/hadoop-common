@@ -84,7 +84,7 @@ import org.apache.hadoop.yarn.util.BuilderUtils;
 import org.apache.hadoop.yarn.util.ConverterUtils;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mortbay.util.MultiException;
+import org.eclipse.jetty.util.MultiException;
 
 
 //@Ignore

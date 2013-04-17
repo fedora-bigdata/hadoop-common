@@ -26,7 +26,7 @@ import org.apache.hadoop.fs.FileSystemTestHelper;
 import org.apache.hadoop.fs.FsConstants;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.fs.viewfs.ConfigUtil;
-import org.mortbay.log.Log;
+import org.eclipse.jetty.util.log.Log;
 
 
 /**

@@ -60,24 +60,24 @@ import org.apache.hadoop.security.authentication.server.AuthenticationFilter;
 import org.apache.hadoop.security.authorize.AccessControlList;
 import org.apache.hadoop.security.ssl.SSLFactory;
 import org.apache.hadoop.util.ReflectionUtils;
-import org.mortbay.io.Buffer;
-import org.mortbay.jetty.Connector;
-import org.mortbay.jetty.Handler;
-import org.mortbay.jetty.MimeTypes;
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.handler.ContextHandler;
-import org.mortbay.jetty.handler.ContextHandlerCollection;
-import org.mortbay.jetty.nio.SelectChannelConnector;
-import org.mortbay.jetty.security.SslSocketConnector;
-import org.mortbay.jetty.servlet.Context;
-import org.mortbay.jetty.servlet.DefaultServlet;
-import org.mortbay.jetty.servlet.FilterHolder;
-import org.mortbay.jetty.servlet.FilterMapping;
-import org.mortbay.jetty.servlet.ServletHandler;
-import org.mortbay.jetty.servlet.ServletHolder;
-import org.mortbay.jetty.webapp.WebAppContext;
-import org.mortbay.thread.QueuedThreadPool;
-import org.mortbay.util.MultiException;
+import org.eclipse.jetty.io.Buffer;
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.http.MimeTypes;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.ContextHandler;
+import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+import org.eclipse.jetty.server.nio.SelectChannelConnector;
+import org.eclipse.jetty.server.ssl.SslSocketConnector;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.DefaultServlet;
+import org.eclipse.jetty.servlet.FilterHolder;
+import org.eclipse.jetty.servlet.FilterMapping;
+import org.eclipse.jetty.servlet.ServletHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.webapp.WebAppContext;
+import org.eclipse.jetty.util.thread.QueuedThreadPool;
+import org.eclipse.jetty.util.MultiException;
 
 import com.sun.jersey.spi.container.servlet.ServletContainer;
 
@@ -111,11 +111,12 @@ public class HttpServer implements FilterContainer {
 
   private SSLFactory sslFactory;
   protected final Server webServer;
+  protected final ContextHandlerCollection contexts;
   protected final Connector listener;
   protected final WebAppContext webAppContext;
   protected final boolean findPort;
-  protected final Map<Context, Boolean> defaultContexts =
-      new HashMap<Context, Boolean>();
+  protected final Map<ServletContextHandler, Boolean> defaultContexts =
+      new HashMap<ServletContextHandler, Boolean>();
   protected final List<String> filterNames = new ArrayList<String>();
   private static final int MAX_RETRIES = 10;
   static final String STATE_DESCRIPTION_ALIVE = " - alive";
@@ -221,7 +222,6 @@ public class HttpServer implements FilterContainer {
           throw new IOException(ex);
         }
         SslSocketConnector sslListener = new SslSocketConnector() {
-          @Override
           protected SSLServerSocketFactory createFactory() throws Exception {
             return sslFactory.createSSLServerSocketFactory();
           }
@@ -248,8 +248,7 @@ public class HttpServer implements FilterContainer {
     webServer.setThreadPool(threadPool);
 
     final String appDir = getWebAppsPath(name);
-    ContextHandlerCollection contexts = new ContextHandlerCollection();
-    webServer.setHandler(contexts);
+    contexts = new ContextHandlerCollection();
 
     webAppContext = new WebAppContext();
     webAppContext.setDisplayName(name);
@@ -258,7 +257,8 @@ public class HttpServer implements FilterContainer {
     webAppContext.getServletContext().setAttribute(CONF_CONTEXT_ATTRIBUTE, conf);
     webAppContext.getServletContext().setAttribute(ADMINS_ACL, adminsAcl);
     addNoCacheFilter(webAppContext);
-    webServer.addHandler(webAppContext);
+    contexts.addHandler(webAppContext);
+    webServer.setHandler(contexts);
 
     addDefaultApps(contexts, appDir, conf);
         
@@ -337,14 +337,14 @@ public class HttpServer implements FilterContainer {
     // set up the context for "/logs/" if "hadoop.log.dir" property is defined. 
     String logDir = System.getProperty("hadoop.log.dir");
     if (logDir != null) {
-      Context logContext = new Context(parent, "/logs");
+      ServletContextHandler logContext = new ServletContextHandler(parent, "/logs");
       logContext.setResourceBase(logDir);
       logContext.addServlet(AdminAuthorizedServlet.class, "/*");
       if (conf.getBoolean(
           CommonConfigurationKeys.HADOOP_JETTY_LOGS_SERVE_ALIASES,
           CommonConfigurationKeys.DEFAULT_HADOOP_JETTY_LOGS_SERVE_ALIASES)) {
         logContext.getInitParams().put(
-            "org.mortbay.jetty.servlet.Default.aliases", "true");
+            "org.eclipse.jetty.servlet.Default.aliases", "true");
       }
       logContext.setDisplayName("logs");
       setContextAttributes(logContext, conf);
@@ -352,7 +352,7 @@ public class HttpServer implements FilterContainer {
       defaultContexts.put(logContext, true);
     }
     // set up the context for "/static/*"
-    Context staticContext = new Context(parent, "/static");
+    ServletContextHandler staticContext = new ServletContextHandler(parent, "/static");
     staticContext.setResourceBase(appDir + "/static");
     staticContext.addServlet(DefaultServlet.class, "/*");
     staticContext.setDisplayName("static");
@@ -360,7 +360,7 @@ public class HttpServer implements FilterContainer {
     defaultContexts.put(staticContext, true);
   }
   
-  private void setContextAttributes(Context context, Configuration conf) {
+  private void setContextAttributes(ServletContextHandler context, Configuration conf) {
     context.getServletContext().setAttribute(CONF_CONTEXT_ATTRIBUTE, conf);
     context.getServletContext().setAttribute(ADMINS_ACL, adminsAcl);
   }
@@ -377,10 +377,11 @@ public class HttpServer implements FilterContainer {
     addServlet("conf", "/conf", ConfServlet.class);
   }
 
-  public void addContext(Context ctxt, boolean isFiltered)
+  public void addContext(ServletContextHandler ctxt, boolean isFiltered)
       throws IOException {
-    webServer.addHandler(ctxt);
     addNoCacheFilter(webAppContext);
+    contexts.addHandler(ctxt);
+    webServer.setHandler(contexts);
     defaultContexts.put(ctxt, isFiltered);
   }
 
@@ -481,7 +482,7 @@ public class HttpServer implements FilterContainer {
        FilterMapping fmap = new FilterMapping();
        fmap.setPathSpec(pathSpec);
        fmap.setFilterName(SPNEGO_FILTER);
-       fmap.setDispatches(Handler.ALL);
+       fmap.setDispatches(FilterMapping.ALL);
        handler.addFilterMapping(fmap);
     }
   }
@@ -495,9 +496,9 @@ public class HttpServer implements FilterContainer {
     LOG.info("Added filter " + name + " (class=" + classname
         + ") to context " + webAppContext.getDisplayName());
     final String[] ALL_URLS = { "/*" };
-    for (Map.Entry<Context, Boolean> e : defaultContexts.entrySet()) {
+    for (Map.Entry<ServletContextHandler, Boolean> e : defaultContexts.entrySet()) {
       if (e.getValue()) {
-        Context ctx = e.getKey();
+        ServletContextHandler ctx = e.getKey();
         defineFilter(ctx, name, classname, parameters, ALL_URLS);
         LOG.info("Added filter " + name + " (class=" + classname
             + ") to context " + ctx.getDisplayName());
@@ -511,7 +512,7 @@ public class HttpServer implements FilterContainer {
       Map<String, String> parameters) {
     final String[] ALL_URLS = { "/*" };
     defineFilter(webAppContext, name, classname, parameters, ALL_URLS);
-    for (Context ctx : defaultContexts.keySet()) {
+    for (ServletContextHandler ctx : defaultContexts.keySet()) {
       defineFilter(ctx, name, classname, parameters, ALL_URLS);
     }
     LOG.info("Added global filter '" + name + "' (class=" + classname + ")");
@@ -520,7 +521,7 @@ public class HttpServer implements FilterContainer {
   /**
    * Define a filter for a context and set up default url mappings.
    */
-  protected void defineFilter(Context ctx, String name,
+  protected void defineFilter(ServletContextHandler ctx, String name,
       String classname, Map<String,String> parameters, String[] urls) {
 
     FilterHolder holder = new FilterHolder();
@@ -529,7 +530,7 @@ public class HttpServer implements FilterContainer {
     holder.setInitParameters(parameters);
     FilterMapping fmap = new FilterMapping();
     fmap.setPathSpecs(urls);
-    fmap.setDispatches(Handler.ALL);
+    fmap.setDispatches(FilterMapping.ALL);
     fmap.setFilterName(name);
     ServletHandler handler = ctx.getServletHandler();
     handler.addFilter(holder, fmap);
@@ -541,13 +542,13 @@ public class HttpServer implements FilterContainer {
    * @param webAppCtx The WebApplicationContext to add to
    */
   protected void addFilterPathMapping(String pathSpec,
-      Context webAppCtx) {
+      ServletContextHandler webAppCtx) {
     ServletHandler handler = webAppCtx.getServletHandler();
     for(String name : filterNames) {
       FilterMapping fmap = new FilterMapping();
       fmap.setPathSpec(pathSpec);
       fmap.setFilterName(name);
-      fmap.setDispatches(Handler.ALL);
+      fmap.setDispatches(FilterMapping.ALL);
       handler.addFilterMapping(fmap);
     }
   }
@@ -1075,8 +1076,8 @@ public class HttpServer implements FilterContainer {
      */
     private String inferMimeType(ServletRequest request) {
       String path = ((HttpServletRequest)request).getRequestURI();
-      ContextHandler.SContext sContext = (ContextHandler.SContext)config.getServletContext();
-      MimeTypes mimes = sContext.getContextHandler().getMimeTypes();
+      ContextHandler.Context context = (ContextHandler.Context)config.getServletContext();
+      MimeTypes mimes = context.getContextHandler().getMimeTypes();
       Buffer mimeBuffer = mimes.getMimeByExtension(path);
       return (mimeBuffer == null) ? null : mimeBuffer.toString();
     }
