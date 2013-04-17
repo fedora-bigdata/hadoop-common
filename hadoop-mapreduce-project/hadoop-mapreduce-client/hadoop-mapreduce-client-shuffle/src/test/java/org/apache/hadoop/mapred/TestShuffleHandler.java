@@ -78,7 +78,7 @@ import org.jboss.netty.handler.codec.http.HttpResponse;
 import org.jboss.netty.handler.codec.http.HttpResponseStatus;
 import org.junit.Assert;
 import org.junit.Test;
-import org.mortbay.jetty.HttpHeaders;
+import org.eclipse.jetty.http.HttpHeaders;
 
 public class TestShuffleHandler {
   static final long MiB = 1024 * 1024; 

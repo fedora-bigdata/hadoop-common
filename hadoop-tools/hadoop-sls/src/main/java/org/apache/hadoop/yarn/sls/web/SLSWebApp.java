@@ -32,10 +32,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FileUtils;
 import org.apache.hadoop.yarn.server.resourcemanager.scheduler.event
         .SchedulerEventType;
-import org.mortbay.jetty.Handler;
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.handler.AbstractHandler;
-import org.mortbay.jetty.Request;
+import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.handler.AbstractHandler;
+import org.eclipse.jetty.server.handler.ResourceHandler;
 
 import org.apache.hadoop.yarn.sls.SLSRunner;
 import org.apache.hadoop.yarn.sls.scheduler.FairSchedulerMetrics;
@@ -45,7 +46,6 @@ import com.codahale.metrics.Counter;
 import com.codahale.metrics.Gauge;
 import com.codahale.metrics.Histogram;
 import com.codahale.metrics.MetricRegistry;
-import org.mortbay.jetty.handler.ResourceHandler;
 
 public class SLSWebApp extends HttpServlet {
   private static final long serialVersionUID = 1905162041950251407L;
@@ -108,8 +108,9 @@ public class SLSWebApp extends HttpServlet {
 
     Handler handler = new AbstractHandler() {
       @Override
-      public void handle(String target, HttpServletRequest request,
-                         HttpServletResponse response, int dispatch) {
+      public void handle(String target, Request baseRequest,
+                         HttpServletRequest request,
+                         HttpServletResponse response) {
         try{
           // timeunit
           int timeunit = 1000;   // second, divide millionsecond / 1000
@@ -131,7 +132,7 @@ public class SLSWebApp extends HttpServlet {
             // js/css request
             if (target.startsWith("/js") || target.startsWith("/css")) {
               response.setCharacterEncoding("utf-8");
-              staticHandler.handle(target, request, response, dispatch);
+              staticHandler.handle(target, baseRequest, request, response);
             } else
               // json request
               if (target.equals("/simulateMetrics")) {

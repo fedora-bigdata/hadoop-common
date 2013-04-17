@@ -59,9 +59,9 @@ import org.apache.hadoop.yarn.webapp.util.WebAppUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.servlet.Context;
-import org.mortbay.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 
 /**
  * Test the WebAppProxyServlet and WebAppProxy. For back end use simple web
@@ -81,7 +81,7 @@ public class TestWebAppProxyServlet {
   @BeforeClass
   public static void start() throws Exception {
     server = new Server(0);
-    Context context = new Context();
+    ServletContextHandler context = new ServletContextHandler();
     context.setContextPath("/foo");
     server.setHandler(context);
     context.addServlet(new ServletHolder(TestServlet.class), "/bar/");
