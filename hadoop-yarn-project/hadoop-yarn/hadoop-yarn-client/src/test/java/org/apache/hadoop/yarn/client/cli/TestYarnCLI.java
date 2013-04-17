@@ -62,7 +62,7 @@ import org.apache.hadoop.yarn.exceptions.ApplicationNotFoundException;
 import org.apache.hadoop.yarn.util.Records;
 import org.junit.Before;
 import org.junit.Test;
-import org.mortbay.log.Log;
+import org.eclipse.jetty.util.log.Log;
 
 import org.apache.commons.cli.Options;
 

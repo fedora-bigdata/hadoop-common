@@ -83,7 +83,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.mortbay.log.Log;
+import org.eclipse.jetty.util.log.Log;
 
 public class TestAMRMClient {
   static Configuration conf = null;

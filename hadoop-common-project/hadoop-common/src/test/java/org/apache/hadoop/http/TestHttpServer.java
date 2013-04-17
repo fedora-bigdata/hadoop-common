@@ -63,8 +63,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.util.reflection.Whitebox;
-import org.mortbay.jetty.Connector;
-import org.mortbay.util.ajax.JSON;
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.util.ajax.JSON;
 
 import static org.mockito.Mockito.*;
 
