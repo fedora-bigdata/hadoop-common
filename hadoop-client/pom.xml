@@ -48,10 +48,6 @@
           <artifactId>tomcat-jasper</artifactId>
         </exclusion>
         <exclusion>
-          <groupId>org.apache.tomcat</groupId>
-          <artifactId>tomcat-jasper</artifactId>
-        </exclusion>
-        <exclusion>
           <groupId>javax.servlet</groupId>
           <artifactId>servlet-api</artifactId>
         </exclusion>
