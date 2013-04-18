@@ -166,8 +166,8 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>tomcat</groupId>
-      <artifactId>jasper-runtime</artifactId>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>jasper</artifactId>
       <scope>compile</scope>
     </dependency>
     <dependency>
