@@ -42,6 +42,7 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.fs.s3.INode.FileType;
 import org.jets3t.service.S3Service;
 import org.jets3t.service.S3ServiceException;
+import org.jets3t.service.ServiceException;
 import org.jets3t.service.impl.rest.httpclient.RestS3Service;
 import org.jets3t.service.model.S3Bucket;
 import org.jets3t.service.model.S3Object;
@@ -60,8 +61,8 @@ class Jets3tFileSystemStore implements FileSystemStore {
   private static final String FILE_SYSTEM_VERSION_NAME = "fs-version";
   private static final String FILE_SYSTEM_VERSION_VALUE = "1";
   
-  private static final Map<String, String> METADATA =
-    new HashMap<String, String>();
+  private static final Map<String, Object> METADATA =
+    new HashMap<String, Object>();
   
   static {
     METADATA.put(FILE_SYSTEM_NAME, FILE_SYSTEM_VALUE);
@@ -173,6 +174,9 @@ class Jets3tFileSystemStore implements FileSystemStore {
       }
       throw new S3Exception(e);
     }
+    catch (ServiceException e) {
+      throw new S3Exception(e);
+    }
   }
 
   private InputStream get(String key, long byteRangeStart) throws IOException {
@@ -187,6 +191,9 @@ class Jets3tFileSystemStore implements FileSystemStore {
       if (e.getCause() instanceof IOException) {
         throw (IOException) e.getCause();
       }
+      throw new S3Exception(e);
+    }
+    catch (ServiceException e) {
       throw new S3Exception(e);
     }
   }
