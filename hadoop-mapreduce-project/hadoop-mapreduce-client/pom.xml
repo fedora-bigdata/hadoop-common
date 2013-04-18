@@ -82,10 +82,6 @@
           <artifactId>tomcat-jasper</artifactId>
         </exclusion>
         <exclusion>
-          <groupId>org.apache.tomcat</groupId>
-          <artifactId>tomcat-jasper</artifactId>
-        </exclusion>
-        <exclusion>
           <groupId>org.mortbay.jetty</groupId>
           <artifactId>jsp-2.1-jetty</artifactId>
         </exclusion>
