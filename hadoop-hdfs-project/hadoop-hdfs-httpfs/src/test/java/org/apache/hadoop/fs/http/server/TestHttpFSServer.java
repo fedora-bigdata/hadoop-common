@@ -157,7 +157,7 @@ public class TestHttpFSServer extends HFSTestCase {
     URL url = cl.getResource("webapp");
     WebAppContext context = new WebAppContext(url.getPath(), "/webhdfs");
     Server server = TestJettyHelper.getJettyServer();
-    server.addHandler(context);
+    server.setHandler(context);
     server.start();
     if (addDelegationTokenAuthHandler) {
       HttpFSServerWebApp.get().setAuthority(TestJettyHelper.getAuthority());
