@@ -136,7 +136,7 @@ public class TestHTestCase extends HTestCase {
     context.setContextPath("/");
     context.addServlet(MyServlet.class, "/bar");
     Server server = TestJettyHelper.getJettyServer();
-    server.addHandler(context);
+    server.setHandler(context);
     server.start();
     URL url = new URL(TestJettyHelper.getJettyURL(), "/bar");
     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
