@@ -763,7 +763,8 @@ public final class HttpServer2 implements FilterContainer {
       return null;
 
     Connector c = webServer.getConnectors()[index];
-    if (c.getLocalPort() == -1) {
+    // jetty8 has 2 getLocalPort err values
+    if (c.getLocalPort() == -1 || c.getLocalPort() == -2) {
       // The connector is not bounded
       return null;
     }
@@ -853,7 +854,7 @@ public final class HttpServer2 implements FilterContainer {
   void openListeners() throws Exception {
     for (ListenerInfo li : listeners) {
       Connector listener = li.listener;
-      if (!li.isManaged || li.listener.getLocalPort() != -1) {
+      if (!li.isManaged || (li.listener.getLocalPort() != -1 && li.listener.getLocalPort() != -2)) {
         // This listener is either started externally or has been bound
         continue;
       }
