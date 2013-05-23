@@ -322,7 +322,7 @@ public class HttpServer implements FilterContainer {
       // the same port with indeterminate routing of incoming requests to them
       ret.setReuseAddress(false);
     }
-    ret.setHeaderBufferSize(1024*64);
+    ret.setRequestHeaderSize(1024*64);
     return ret;
   }
 
