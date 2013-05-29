@@ -147,7 +147,7 @@ public class TestNMWebServices extends JerseyTest {
   public TestNMWebServices() {
     super(new WebAppDescriptor.Builder(
         "org.apache.hadoop.yarn.server.nodemanager.webapp")
-        .contextListenerClass(GuiceServletConfig.class)
+        //.contextListenerClass(GuiceServletConfig.class)
         .filterClass(com.google.inject.servlet.GuiceFilter.class)
         .contextPath("jersey-guice-filter").servletPath("/").build());
   }
