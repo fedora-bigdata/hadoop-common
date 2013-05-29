@@ -183,7 +183,7 @@ public class TestAMWebServicesTasks extends JerseyTest {
   public TestAMWebServicesTasks() {
     super(new WebAppDescriptor.Builder(
         "org.apache.hadoop.mapreduce.v2.app.webapp")
-        .contextListenerClass(GuiceServletConfig.class)
+        //.contextListenerClass(GuiceServletConfig.class)
         .filterClass(com.google.inject.servlet.GuiceFilter.class)
         .contextPath("jersey-guice-filter").servletPath("/").build());
   }
