@@ -174,7 +174,7 @@ public class TestNMWebServicesApps extends JerseyTest {
         .accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
     assertEquals(MediaType.APPLICATION_JSON_TYPE, response.getType());
     JSONObject json = response.getEntity(JSONObject.class);
-    assertEquals("apps isn't NULL", JSONObject.NULL, json.get("apps"));
+    assertEquals("apps isn't None",0,json.getJSONObject("apps").length());
   }
 
   private HashMap<String, String> addAppContainers(Application app) {
@@ -281,7 +281,7 @@ public class TestNMWebServicesApps extends JerseyTest {
         .get(ClientResponse.class);
     assertEquals(MediaType.APPLICATION_JSON_TYPE, response.getType());
     JSONObject json = response.getEntity(JSONObject.class);
-    assertEquals("apps is not null", JSONObject.NULL, json.get("apps"));
+    assertEquals("apps is not None", 0, json.getJSONObject("apps").length());
   }
 
   @Test
@@ -363,7 +363,7 @@ public class TestNMWebServicesApps extends JerseyTest {
     assertEquals(MediaType.APPLICATION_JSON_TYPE, response.getType());
     JSONObject json = response.getEntity(JSONObject.class);
 
-    assertEquals("apps is not null", JSONObject.NULL, json.get("apps"));
+    assertEquals("apps is not None", 0, json.getJSONObject("apps").length());
   }
 
   @Test

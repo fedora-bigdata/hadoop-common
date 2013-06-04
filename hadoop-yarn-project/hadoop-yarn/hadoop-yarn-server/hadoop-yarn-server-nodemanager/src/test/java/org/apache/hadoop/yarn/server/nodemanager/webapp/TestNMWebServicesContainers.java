@@ -175,7 +175,7 @@ public class TestNMWebServicesContainers extends JerseyTest {
         .get(ClientResponse.class);
     assertEquals(MediaType.APPLICATION_JSON_TYPE, response.getType());
     JSONObject json = response.getEntity(JSONObject.class);
-    assertEquals("apps isn't NULL", JSONObject.NULL, json.get("containers"));
+    assertEquals("apps isn't None", 0, json.getJSONObject("containers").length());
   }
 
   private HashMap<String, String> addAppContainers(Application app) {
