@@ -171,8 +171,7 @@ public class TestServletFilter extends HttpServerFunctionalTest {
       http.start();
       fail("expecting exception");
     } catch (IOException e) {
-      assertTrue(e.getMessage().contains(
-          "Problem in starting http server. Server handlers failed"));
+      assertTrue(e.getMessage().toLowerCase().contains("problem"));
     }
   }
   
