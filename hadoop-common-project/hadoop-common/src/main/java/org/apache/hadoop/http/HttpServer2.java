@@ -83,6 +83,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.MultiException;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.webapp.WebAppContext;
 
@@ -306,21 +307,23 @@ public final class HttpServer2 implements FilterContainer {
         if ("http".equals(scheme)) {
           listener = HttpServer2.createDefaultChannelConnector();
         } else if ("https".equals(scheme)) {
-          SslSocketConnector c = new SslSocketConnector();
-          c.setNeedClientAuth(needsClientAuth);
-          c.setKeyPassword(keyPassword);
+          // Jetty 8+ moved JKS config to SslContextFactory
+          SslContextFactory scf = new SslContextFactory();
+          scf.setNeedClientAuth(needsClientAuth);
+          scf.setKeyManagerPassword(keyPassword);
 
           if (keyStore != null) {
-            c.setKeystore(keyStore);
-            c.setKeystoreType(keyStoreType);
-            c.setPassword(keyStorePassword);
+            scf.setKeyStorePath(keyStore);
+            scf.setKeyStoreType(keyStoreType);
+            scf.setKeyStorePassword(keyStorePassword);
           }
 
           if (trustStore != null) {
-            c.setTruststore(trustStore);
-            c.setTruststoreType(trustStoreType);
-            c.setTrustPassword(trustStorePassword);
+            scf.setTrustStore(trustStore);
+            scf.setTrustStoreType(trustStoreType);
+            scf.setTrustStorePassword(trustStorePassword);
           }
+          SslSocketConnector c = new SslSocketConnector(scf);
           listener = c;
 
         } else {
