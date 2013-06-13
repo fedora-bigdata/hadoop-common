@@ -905,7 +905,7 @@
             <exclude>${test.exclude.pattern}</exclude>
             <exclude>**/Test*$*.java</exclude>
             <!-- individual test failures to be investigated -->
-            <exclude>**/TestSSLHttpServer.java</exclude>
+            <!--exclude>**/TestSSLHttpServer.java</exclude-->
             <exclude>**/TestUnmanagedAMLauncher.java</exclude>
             <exclude>**/TestDoAsEffectiveUser.java</exclude>
             <exclude>**/TestRPCCompatibility.java</exclude>
