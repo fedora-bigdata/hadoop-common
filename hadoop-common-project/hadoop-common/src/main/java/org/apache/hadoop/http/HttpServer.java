@@ -76,11 +76,13 @@ import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.FilterMapping;
 import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.util.MultiException;
 
 import com.sun.jersey.spi.container.servlet.ServletContainer;
+
 
 /**
  * Create a Jetty embedded server to answer http requests. The primary goal
@@ -222,10 +224,18 @@ public class HttpServer implements FilterContainer {
         } catch (GeneralSecurityException ex) {
           throw new IOException(ex);
         }
-        SslSocketConnector sslListener = new SslSocketConnector() {
-          protected SSLServerSocketFactory createFactory() throws Exception {
-            return sslFactory.createSSLServerSocketFactory();
-          }
+        // Jetty 8+ moved JKS config to SslContextFactory
+        SslContextFactory sslContextFactory = new SslContextFactory(conf.get("ssl.server.keystore.location",""));
+        sslContextFactory.setKeyStorePassword(conf.get("ssl.server.keystore.password",""));
+        if (sslFactory.isClientCertRequired()) {
+            sslContextFactory.setTrustStore(conf.get("ssl.server.truststore.location",""));
+            sslContextFactory.setTrustStorePassword(conf.get("ssl.server.truststore.password",""));
+            sslContextFactory.setTrustStoreType(conf.get("ssl.server.truststore.type", "jks"));
+        }
+        SslSocketConnector sslListener = new SslSocketConnector(sslContextFactory) {
+            protected SSLServerSocketFactory createFactory() throws Exception {
+                return sslFactory.createSSLServerSocketFactory();
+            }
         };
         listener = sslListener;
       } else {
@@ -535,7 +545,9 @@ public class HttpServer implements FilterContainer {
     FilterHolder holder = new FilterHolder();
     holder.setName(name);
     holder.setClassName(classname);
-    holder.setInitParameters(parameters);
+    if (null != parameters) {
+        holder.setInitParameters(parameters);
+    }
     FilterMapping fmap = new FilterMapping();
     fmap.setPathSpecs(urls);
     fmap.setDispatches(FilterMapping.ALL);
@@ -620,12 +632,12 @@ public class HttpServer implements FilterContainer {
     if (webServer.isStarted()) {
       throw new IOException("Failed to add ssl listener");
     }
-    SslSocketConnector sslListener = new SslSocketConnector();
+    SslContextFactory sslContextFactory = new SslContextFactory(keystore);
+    sslContextFactory.setKeyStorePassword(storPass);
+    sslContextFactory.setKeyManagerPassword(keyPass);
+    SslSocketConnector sslListener = new SslSocketConnector(sslContextFactory);
     sslListener.setHost(addr.getHostName());
     sslListener.setPort(addr.getPort());
-    sslListener.setKeystore(keystore);
-    sslListener.setPassword(storPass);
-    sslListener.setKeyPassword(keyPass);
     webServer.addConnector(sslListener);
   }
 
@@ -649,14 +661,14 @@ public class HttpServer implements FilterContainer {
       System.setProperty("javax.net.ssl.trustStoreType", sslConf.get(
           "ssl.server.truststore.type", "jks"));
     }
-    SslSocketConnector sslListener = new SslSocketConnector();
+    SslContextFactory sslContextFactory = new SslContextFactory(sslConf.get("ssl.server.keystore.location",""));
+    sslContextFactory.setKeyStorePassword(sslConf.get("ssl.server.keystore.password", ""));
+    sslContextFactory.setKeyManagerPassword(sslConf.get("ssl.server.keystore.keypassword", ""));
+    sslContextFactory.setKeyStoreType(sslConf.get("ssl.server.keystore.type", "jks"));
+    sslContextFactory.setNeedClientAuth(needCertsAuth);
+    SslSocketConnector sslListener = new SslSocketConnector(sslContextFactory);
     sslListener.setHost(addr.getHostName());
     sslListener.setPort(addr.getPort());
-    sslListener.setKeystore(sslConf.get("ssl.server.keystore.location"));
-    sslListener.setPassword(sslConf.get("ssl.server.keystore.password", ""));
-    sslListener.setKeyPassword(sslConf.get("ssl.server.keystore.keypassword", ""));
-    sslListener.setKeystoreType(sslConf.get("ssl.server.keystore.type", "jks"));
-    sslListener.setNeedClientAuth(needCertsAuth);
     webServer.addConnector(sslListener);
   }
   
