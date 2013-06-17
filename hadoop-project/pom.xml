@@ -905,7 +905,6 @@
             <exclude>${test.exclude.pattern}</exclude>
             <exclude>**/Test*$*.java</exclude>
             <!-- individual test failures to be investigated -->
-            <!--exclude>**/TestSSLHttpServer.java</exclude-->
             <exclude>**/TestUnmanagedAMLauncher.java</exclude>
             <exclude>**/TestDoAsEffectiveUser.java</exclude>
             <exclude>**/TestRPCCompatibility.java</exclude>
@@ -915,10 +914,7 @@
             <exclude>**/TestHftpURLTimeouts.java</exclude>
             <exclude>**/TestNameNodeMetrics.java</exclude>
             <exclude>**/TestCheckpoint.java</exclude>
-            <exclude>**/TestBookKeeperJournalManager.java</exclude>
             <exclude>**/TestBookKeeperHACheckpoints.java</exclude>
-            <exclude>**/TestBookKeeperAsHASharedDir.java</exclude>
-            <exclude>**/TestBookKeeperJournalManager.java</exclude>
             <!-- set in the hadoop-yarn-server-nodemanager pom
             <exclude>**/TestNMWebServices*.java</exclude>
             -->
