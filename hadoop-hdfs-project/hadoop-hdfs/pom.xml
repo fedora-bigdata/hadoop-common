@@ -262,6 +262,12 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
                 <groupId>org.codehaus.mojo.jspc</groupId>
                 <artifactId>jspc-compiler-tomcat6</artifactId>
                 <version>2.0-alpha-3</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.tomcat</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <!-- volatile mix of glassfish 2.2 jspc impl & Tomcat's servlet 3.0 api
                  EXERCISE CAUTION when messing with these
