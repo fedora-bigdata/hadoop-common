@@ -409,9 +409,9 @@
         <version>8.1.5.v20120716</version>
       </dependency>
       <dependency>
-        <groupId>tomcat</groupId>
-        <artifactId>jasper-compiler</artifactId>
-        <version>5.5.23</version>
+        <groupId>org.apache.tomcat</groupId>
+        <artifactId>tomcat-jasper</artifactId>
+        <version>7.0.37</version>
         <exclusions>
           <exclusion>
             <groupId>javax.servlet</groupId>
@@ -421,12 +421,11 @@
             <groupId>ant</groupId>
             <artifactId>ant</artifactId>
           </exclusion>
+          <exclusion>
+             <groupId>org.eclipse.jdt.core.compiler</groupId>
+             <artifactId>ecj</artifactId>
+          </exclusion>
         </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>tomcat</groupId>
-        <artifactId>jasper-runtime</artifactId>
-        <version>5.5.23</version>
       </dependency>
       <dependency>
         <groupId>javax.servlet.jsp</groupId>
