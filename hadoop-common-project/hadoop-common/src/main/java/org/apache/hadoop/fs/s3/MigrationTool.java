@@ -34,6 +34,7 @@ import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import org.jets3t.service.S3Service;
 import org.jets3t.service.S3ServiceException;
+import org.jets3t.service.ServiceException;
 import org.jets3t.service.impl.rest.httpclient.RestS3Service;
 import org.jets3t.service.model.S3Bucket;
 import org.jets3t.service.model.S3Object;
@@ -248,6 +249,9 @@ public class MigrationTool extends Configured implements Tool {
         }
         throw new S3Exception(e);
       }
+     catch (ServiceException e) {
+        throw new S3Exception(e);
+     }
     }
     
     private String pathToKey(Path path) {

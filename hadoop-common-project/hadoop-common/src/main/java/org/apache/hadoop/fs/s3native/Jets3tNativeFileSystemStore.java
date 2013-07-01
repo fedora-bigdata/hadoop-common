@@ -37,6 +37,7 @@ import org.apache.hadoop.fs.s3.S3Exception;
 import org.jets3t.service.S3ObjectsChunk;
 import org.jets3t.service.S3Service;
 import org.jets3t.service.S3ServiceException;
+import org.jets3t.service.ServiceException;
 import org.jets3t.service.impl.rest.httpclient.RestS3Service;
 import org.jets3t.service.model.S3Bucket;
 import org.jets3t.service.model.S3Object;
@@ -124,11 +125,14 @@ class Jets3tNativeFileSystemStore implements NativeFileSystemStore {
   @Override
   public InputStream retrieve(String key) throws IOException {
     try {
-      S3Object object = s3Service.getObject(bucket, key);
+      S3Object object = s3Service.getObject(bucket.getName(), key);
       return object.getDataInputStream();
     } catch (S3ServiceException e) {
       handleServiceException(key, e);
       return null; //never returned - keep compiler happy
+    }
+    catch (ServiceException e) {
+      throw new S3Exception(e);
     }
   }
   
@@ -142,6 +146,9 @@ class Jets3tNativeFileSystemStore implements NativeFileSystemStore {
     } catch (S3ServiceException e) {
       handleServiceException(key, e);
       return null; //never returned - keep compiler happy
+    }
+    catch (ServiceException e) {
+      throw new S3Exception(e);
     }
   }
 
@@ -165,7 +172,7 @@ class Jets3tNativeFileSystemStore implements NativeFileSystemStore {
       if (prefix.length() > 0 && !prefix.endsWith(PATH_DELIMITER)) {
         prefix += PATH_DELIMITER;
       }
-      S3ObjectsChunk chunk = s3Service.listObjectsChunked(bucket.getName(),
+      S3ObjectsChunk chunk = (S3ObjectsChunk)s3Service.listObjectsChunked(bucket.getName(),
           prefix, delimiter, maxListingLength, priorLastKey);
       
       FileMetadata[] fileMetadata =
@@ -181,6 +188,9 @@ class Jets3tNativeFileSystemStore implements NativeFileSystemStore {
       handleServiceException(e);
       return null; //never returned - keep compiler happy
     }
+    catch (ServiceException e) {
+      throw new S3Exception(e);
+    }
   }
 
   @Override
@@ -189,6 +199,9 @@ class Jets3tNativeFileSystemStore implements NativeFileSystemStore {
       s3Service.deleteObject(bucket, key);
     } catch (S3ServiceException e) {
       handleServiceException(key, e);
+    }
+    catch (ServiceException e) {
+      throw new S3Exception(e);
     }
   }
   
@@ -199,6 +212,9 @@ class Jets3tNativeFileSystemStore implements NativeFileSystemStore {
           new S3Object(dstKey), false);
     } catch (S3ServiceException e) {
       handleServiceException(srcKey, e);
+    }
+    catch (ServiceException e) {
+      throw new S3Exception(e);
     }
   }
 
