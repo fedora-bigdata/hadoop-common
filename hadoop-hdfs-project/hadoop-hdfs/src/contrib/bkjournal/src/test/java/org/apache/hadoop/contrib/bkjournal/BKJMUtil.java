@@ -156,6 +156,13 @@ class BKJMUtil {
           List<String> children = zkc.getChildren("/ledgers/available",
                                                   false);
           mostRecentSize = children.size();
+          // TODO: Bookkeeper 4.2.0 introduced "readonly" bookies
+          // which mess with test bookie counts;
+          // unclear why setReadOnlyModeEnabled(false) doesn't have
+          // backward-compat effect hoped for
+          if (children.contains("readonly")) {
+              mostRecentSize = children.size()-1;
+          }
           if (LOG.isDebugEnabled()) {
             LOG.debug("Found " + mostRecentSize + " bookies up, "
                       + "waiting for " + count);
