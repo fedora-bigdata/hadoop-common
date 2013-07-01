@@ -27,7 +27,7 @@ import org.apache.hadoop.hdfs.protocol.HdfsFileStatus;
 import org.apache.hadoop.util.Time;
 import org.junit.Assert;
 import org.junit.Test;
-import org.mortbay.util.ajax.JSON;
+import org.eclipse.jetty.util.ajax.JSON;
 
 public class TestJsonUtil {
   static FileStatus toFileStatus(HdfsFileStatus f, String parent) {

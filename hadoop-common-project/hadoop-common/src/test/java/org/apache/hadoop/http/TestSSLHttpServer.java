@@ -76,6 +76,7 @@ public class TestSSLHttpServer extends HttpServerFunctionalTest {
 
     conf.setInt(HttpServer.HTTP_MAX_THREADS, 10);
     conf.addResource(CONFIG_SITE_XML);
+    conf.addResource(conf.get("hadoop.ssl.server.conf","ssl-server.xml"));
     server = createServer("test", conf);
     server.addServlet("echo", "/echo", TestHttpServer.EchoServlet.class);
     server.start();

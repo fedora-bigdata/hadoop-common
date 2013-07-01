@@ -32,13 +32,13 @@ import org.apache.hadoop.http.HttpConfig;
 import org.apache.hadoop.http.HttpServer;
 import org.apache.hadoop.security.UserGroupInformation;
 import org.apache.hadoop.security.ssl.SSLFactory;
-import org.mortbay.jetty.Connector;
-import org.mortbay.jetty.nio.SelectChannelConnector;
-import org.mortbay.jetty.security.SslSocketConnector;
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.ssl.SslSocketConnector;
 
 import javax.net.ssl.SSLServerSocketFactory;
 
 import com.google.common.annotations.VisibleForTesting;
+
 
 /**
  * Utility class to start a datanode in a secure cluster, first obtaining 
@@ -118,7 +118,6 @@ public class SecureDataNodeStarter implements Daemon {
         throw new IOException(ex);
       }
       SslSocketConnector sslListener = new SslSocketConnector() {
-        @Override
         protected SSLServerSocketFactory createFactory() throws Exception {
           return sslFactory.createSSLServerSocketFactory();
         }
