@@ -50,6 +50,10 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
 	<configuration>
+          <additionalClasspathElements>
+            <additionalClasspathElement>${user.dir}/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-tests/target/test-classes</additionalClasspathElement>
+            <additionalClasspathElement>${user.dir}/hadoop-common-project/hadoop-common/target/test-classes</additionalClasspathElement>
+          </additionalClasspathElements>
           <systemPropertyVariables>
             <log4j.configuration>file:///${project.basedir}/src/test/resources/log4j.properties</log4j.configuration>
           </systemPropertyVariables>

@@ -145,6 +145,10 @@
           <additionalClasspathElements>
             <!-- workaround for JobConf#setJarByClass -->
             <additionalClasspathElement>${project.build.directory}/${project.artifactId}-${project.version}-tests.jar</additionalClasspathElement>
+            <additionalClasspathElement>${user.dir}/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-tests/target/test-classes</additionalClasspathElement>
+            <additionalClasspathElement>${user.dir}/hadoop-hdfs-project/hadoop-hdfs/target/test-classes</additionalClasspathElement>
+            <additionalClasspathElement>${user.dir}/hadoop-common-project/hadoop-common/target/test-classes</additionalClasspathElement>
+            <additionalClasspathElement>${user.dir}/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-resourcemanager/target/test-classes</additionalClasspathElement>
           </additionalClasspathElements>
         </configuration>
       </plugin>
