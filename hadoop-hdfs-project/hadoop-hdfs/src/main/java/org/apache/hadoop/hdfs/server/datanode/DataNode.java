@@ -366,7 +366,7 @@ public class DataNode extends Configured
            conf, new AccessControlList(conf.get(DFS_ADMIN, " ")))
        : new HttpServer("datanode", infoHost, tmpInfoPort, tmpInfoPort == 0,
            conf, new AccessControlList(conf.get(DFS_ADMIN, " ")),
-           secureResources.getListener());
+           secureResources.getListener(), null, secureResources.getServer());
     LOG.info("Opened info server at " + infoHost + ":" + tmpInfoPort);
     if (conf.getBoolean(DFS_HTTPS_ENABLE_KEY, false)) {
       boolean needClientAuth = conf.getBoolean(DFS_CLIENT_HTTPS_NEED_AUTH_KEY,

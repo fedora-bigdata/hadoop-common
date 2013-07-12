@@ -19,6 +19,7 @@
 package org.apache.hadoop.mapred;
 
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.apache.hadoop.fs.Path;
@@ -77,7 +78,7 @@ public abstract class NotificationTestCase extends HadoopTestCase {
 
     // Start webServer
     webServer.start();
-    port = webServer.getConnectors()[0].getLocalPort();
+    port = ((ServerConnector) webServer.getConnectors()[0]).getLocalPort();
 
   }
 
