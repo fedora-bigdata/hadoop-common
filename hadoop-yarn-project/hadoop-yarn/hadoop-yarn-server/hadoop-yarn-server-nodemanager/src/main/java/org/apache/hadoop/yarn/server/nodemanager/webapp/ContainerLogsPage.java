@@ -328,7 +328,7 @@ public class ContainerLogsPage extends NMView {
         try {
           logDir = new URI(logDir).getPath();
         } catch (URISyntaxException e) {
-          Log.warn(e.getMessage());
+          Log.getRootLogger().warn(e.getMessage());
         }
         String appIdStr = ConverterUtils.toString(containerId
             .getApplicationAttemptId().getApplicationId());

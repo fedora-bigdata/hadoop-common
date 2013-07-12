@@ -779,7 +779,7 @@ public abstract class FSMainOperationsBaseTest extends FileSystemTestHelper {
       rename(src, dst, false, false, false, Rename.NONE);
       Assert.fail("Should throw FileNotFoundException");
     } catch (IOException e) {
-      Log.info("XXX", e);
+      Log.getRootLogger().info("XXX", e);
       Assert.assertTrue(unwrapException(e) instanceof FileNotFoundException);
     }
 

@@ -32,8 +32,10 @@ import org.apache.hadoop.http.HttpConfig;
 import org.apache.hadoop.http.HttpServer;
 import org.apache.hadoop.security.UserGroupInformation;
 import org.apache.hadoop.security.ssl.SSLFactory;
-import org.eclipse.jetty.server.Connector;
-import org.eclipse.jetty.server.ssl.SslSocketConnector;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
+//import org.eclipse.jetty.server.ssl.SslSocketConnector;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 
 import javax.net.ssl.SSLServerSocketFactory;
 
@@ -51,17 +53,21 @@ public class SecureDataNodeStarter implements Daemon {
    */
   public static class SecureResources {
     private final ServerSocket streamingSocket;
-    private final Connector listener;
+    private final ServerConnector listener;
+    private final Server server;
     public SecureResources(ServerSocket streamingSocket,
-        Connector listener) {
+        ServerConnector listener, Server server) {
 
       this.streamingSocket = streamingSocket;
       this.listener = listener;
+      this.server = server;
     }
 
     public ServerSocket getStreamingSocket() { return streamingSocket; }
 
-    public Connector getListener() { return listener; }
+    public ServerConnector getListener() { return listener; }
+
+    public Server getServer() { return server; }
   }
   
   private String [] args;
@@ -95,6 +101,9 @@ public class SecureDataNodeStarter implements Daemon {
   @VisibleForTesting
   public static SecureResources getSecureResources(final SSLFactory sslFactory,
                                   Configuration conf) throws Exception {
+    // Create a server
+    Server server = HttpServer.createServer(conf);
+
     // Obtain secure port for data streaming to datanode
     InetSocketAddress streamingAddr  = DataNode.getStreamingAddr(conf);
     int socketWriteTimeout = conf.getInt(DFSConfigKeys.DFS_DATANODE_SOCKET_WRITE_TIMEOUT_KEY,
@@ -111,7 +120,7 @@ public class SecureDataNodeStarter implements Daemon {
     }
 
     // Obtain secure listener for web server
-    Connector listener;
+    ServerConnector listener;
     if (HttpConfig.isSecure()) {
       try {
         sslFactory.init();
@@ -122,18 +131,18 @@ public class SecureDataNodeStarter implements Daemon {
       SslContextFactory sslContextFactory = new SslContextFactory(conf.get("ssl.server.keystore.location",""));
       sslContextFactory.setKeyStorePassword(conf.get("ssl.server.keystore.password",""));
       if (sslFactory.isClientCertRequired()) {
-        sslContextFactory.setTrustStore(conf.get("ssl.server.truststore.location",""));
+        sslContextFactory.setTrustStorePath(conf.get("ssl.server.truststore.location",""));
         sslContextFactory.setTrustStorePassword(conf.get("ssl.server.truststore.password",""));
         sslContextFactory.setTrustStoreType(conf.get("ssl.server.truststore.type", "jks"));
       }
-      SslSocketConnector sslListener = new SslSocketConnector(sslContextFactory) {
+      ServerConnector sslListener = new ServerConnector(server, sslContextFactory) {
         protected SSLServerSocketFactory createFactory() throws Exception {
           return sslFactory.createSSLServerSocketFactory();
         }
       };
       listener = sslListener;
     } else {
-      listener = HttpServer.createDefaultChannelConnector();
+      listener = HttpServer.createDefaultChannelConnector(server);
     }
 
     InetSocketAddress infoSocAddr = DataNode.getInfoAddr(conf);
@@ -146,7 +155,7 @@ public class SecureDataNodeStarter implements Daemon {
           "context. Needed " + streamingAddr.getPort() + ", got " + ss.getLocalPort());
     }
     System.err.println("Successfully obtained privileged resources (streaming port = "
-        + ss + " ) (http listener port = " + listener.getConnection() +")");
+        + ss + " ) (http listener port = " + listener.getLocalPort() +")");
     
     if ((ss.getLocalPort() > 1023 || listener.getPort() > 1023) &&
         UserGroupInformation.isSecurityEnabled()) {
@@ -154,7 +163,7 @@ public class SecureDataNodeStarter implements Daemon {
     }
     System.err.println("Opened streaming server at " + streamingAddr);
     System.err.println("Opened info server at " + infoSocAddr);
-    return new SecureResources(ss, listener);
+    return new SecureResources(ss, listener, server);
   }
 
 }

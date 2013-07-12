@@ -17,7 +17,9 @@ import junit.framework.Assert;
 import org.apache.hadoop.security.authentication.server.AuthenticationFilter;
 import junit.framework.TestCase;
 import org.mockito.Mockito;
+import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -95,8 +97,10 @@ public abstract class AuthenticatorTestCase extends TestCase {
     ServerSocket ss = new ServerSocket(0);
     port = ss.getLocalPort();
     ss.close();
-    server.getConnectors()[0].setHost(host);
-    server.getConnectors()[0].setPort(port);
+    ServerConnector connector = new ServerConnector(server);
+    connector.setHost(host);
+    connector.setPort(port);
+    server.setConnectors(new Connector[] { connector });
     server.start();
     System.out.println("Running embedded servlet container at: http://" + host + ":" + port);
   }

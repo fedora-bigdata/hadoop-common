@@ -219,7 +219,7 @@ public class WebApps {
         HttpServer server =
             new HttpServer(name, bindAddress, port, findPort, conf,
                 new AdminACLsManager(conf).getAdminAcl(), null,
-                pathList.toArray(new String[0])) {
+                pathList.toArray(new String[0]), null) {
 
               {
                 if (UserGroupInformation.isSecurityEnabled()) {
