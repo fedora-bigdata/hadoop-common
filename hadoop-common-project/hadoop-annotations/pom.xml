@@ -48,8 +48,8 @@
       </activation>
       <dependencies>
         <dependency>
-          <groupId>jdk.tools</groupId>
-          <artifactId>jdk.tools</artifactId>
+          <groupId>com.sun</groupId>
+          <artifactId>tools</artifactId>
           <version>1.6</version>
           <scope>system</scope>
           <systemPath>${java.home}/../lib/tools.jar</systemPath>
