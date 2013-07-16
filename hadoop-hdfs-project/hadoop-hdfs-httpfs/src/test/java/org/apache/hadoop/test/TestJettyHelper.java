@@ -28,7 +28,9 @@ import org.junit.Test;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
+import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
 
 public class TestJettyHelper implements MethodRule {
 
@@ -73,8 +75,10 @@ public class TestJettyHelper implements MethodRule {
       int port = ss.getLocalPort();
       ss.close();
       Server server = new Server(0);
-      server.getConnectors()[0].setHost(host);
-      server.getConnectors()[0].setPort(port);
+      ServerConnector connector = new ServerConnector(server);
+      connector.setHost(host);
+      connector.setPort(port);
+      server.setConnectors(new Connector[] { connector });
       return server;
     } catch (Exception ex) {
       throw new RuntimeException("Could not stop embedded servlet container, " + ex.getMessage(), ex);
@@ -90,8 +94,8 @@ public class TestJettyHelper implements MethodRule {
     Server server = getJettyServer();
     try {
       InetAddress add =
-        InetAddress.getByName(server.getConnectors()[0].getHost());
-      int port = server.getConnectors()[0].getPort();
+        InetAddress.getByName(((ServerConnector)server.getConnectors()[0]).getHost());
+      int port = ((ServerConnector)server.getConnectors()[0]).getPort();
       return new InetSocketAddress(add, port);
     } catch (UnknownHostException ex) {
       throw new RuntimeException(ex);
@@ -128,7 +132,7 @@ public class TestJettyHelper implements MethodRule {
       throw new IllegalStateException("This test does not use @TestJetty");
     }
     try {
-      return new URL("http://" + server.getConnectors()[0].getHost() + ":" + server.getConnectors()[0].getPort());
+      return new URL("http://" + ((ServerConnector)server.getConnectors()[0]).getHost() + ":" + ((ServerConnector)server.getConnectors()[0]).getPort());
     } catch (MalformedURLException ex) {
       throw new RuntimeException("It should never happen, " + ex.getMessage(), ex);
     }

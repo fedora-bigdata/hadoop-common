@@ -195,7 +195,7 @@ public class WebApps {
         }
         HttpServer server =
             new HttpServer(name, bindAddress, port, findPort, conf, 
-            new AdminACLsManager(conf).getAdminAcl(), null, webapp.getServePathSpecs());
+            new AdminACLsManager(conf).getAdminAcl(), null, webapp.getServePathSpecs(), null);
         for(ServletStruct struct: servlets) {
           server.addServlet(struct.name, struct.spec, struct.clazz);
         }
