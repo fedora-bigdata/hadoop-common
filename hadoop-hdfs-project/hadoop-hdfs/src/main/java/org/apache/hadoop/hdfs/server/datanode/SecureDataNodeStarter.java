@@ -38,6 +38,7 @@ import org.eclipse.jetty.server.ssl.SslSocketConnector;
 import javax.net.ssl.SSLServerSocketFactory;
 
 import com.google.common.annotations.VisibleForTesting;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 
 
 /**
@@ -117,7 +118,15 @@ public class SecureDataNodeStarter implements Daemon {
       } catch (GeneralSecurityException ex) {
         throw new IOException(ex);
       }
-      SslSocketConnector sslListener = new SslSocketConnector() {
+      // Jetty 8+ moved JKS config to SslContextFactory
+      SslContextFactory sslContextFactory = new SslContextFactory(conf.get("ssl.server.keystore.location",""));
+      sslContextFactory.setKeyStorePassword(conf.get("ssl.server.keystore.password",""));
+      if (sslFactory.isClientCertRequired()) {
+        sslContextFactory.setTrustStore(conf.get("ssl.server.truststore.location",""));
+        sslContextFactory.setTrustStorePassword(conf.get("ssl.server.truststore.password",""));
+        sslContextFactory.setTrustStoreType(conf.get("ssl.server.truststore.type", "jks"));
+      }
+      SslSocketConnector sslListener = new SslSocketConnector(sslContextFactory) {
         protected SSLServerSocketFactory createFactory() throws Exception {
           return sslFactory.createSSLServerSocketFactory();
         }
