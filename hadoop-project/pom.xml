@@ -414,23 +414,15 @@
         <artifactId>test-jetty-servlet</artifactId>
         <version>9.0.4.v20130625</version>
       </dependency>
-      <!-- volatile mix of glassfish 2.2 jspc & Tomcat's servlet 3.0 api
-           EXERCISE CAUTION when messing with these
-      -->
-      <dependency>
-          <groupId>org.glassfish.web</groupId>
-          <artifactId>javax.servlet.jsp</artifactId>
-          <version>2.2.5</version>
-      </dependency>
-      <dependency>
-          <groupId>org.apache.tomcat</groupId>
-          <artifactId>tomcat-servlet-api</artifactId>
-          <version>7.0.37</version>
-      </dependency>
       <dependency>
         <groupId>commons-el</groupId>
         <artifactId>commons-el</artifactId>
         <version>1.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-jspc-maven-plugin</artifactId>
+        <version>9.0.4.v20130625</version>
       </dependency>
       <dependency>
         <groupId>commons-logging</groupId>
@@ -740,9 +732,9 @@
           <version>1.5.3</version>
         </plugin>
         <plugin>
-          <groupId>org.codehaus.mojo.jspc</groupId>
-          <artifactId>jspc-maven-plugin</artifactId>
-          <version>2.0-alpha-3</version>
+          <groupId>org.eclipse.jetty</groupId>
+          <artifactId>jetty-jspc-maven-plugin</artifactId>
+          <version>9.0.4.v20130625</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
