@@ -46,15 +46,20 @@ public class NativeCodeLoader {
       LOG.debug("Trying to load the custom-built native-hadoop library...");
     }
     try {
-      System.loadLibrary("hadoop");
+      System.load("/usr/lib64/hadoop/libhadoop.so");
       LOG.debug("Loaded the native-hadoop library");
       nativeCodeLoaded = true;
-    } catch (Throwable t) {
-      // Ignore failure to load
-      if(LOG.isDebugEnabled()) {
-        LOG.debug("Failed to load native-hadoop with error: " + t);
-        LOG.debug("java.library.path=" +
-            System.getProperty("java.library.path"));
+    } catch (Throwable t64) {
+      LOG.debug("Failed to load 64-bit native-hadoop with error: " + t64);
+      try {
+        System.load("/usr/lib/hadoop/libhadoop.so");
+        LOG.debug("Loaded the native-hadoop library");
+        nativeCodeLoaded = true;
+      } catch (Throwable t32) {
+        // Ignore failure to load
+        if(LOG.isDebugEnabled()) {
+          LOG.debug("Failed to load 32-bit native-hadoop with error: " + t32);
+        }
       }
     }
     
