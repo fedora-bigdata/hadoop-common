@@ -31,7 +31,7 @@
 
   <properties>
     <failIfNoTests>false</failIfNoTests>
-    <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
+    <maven.test.redirectTestOutputToFile>false</maven.test.redirectTestOutputToFile>
 
     <test.exclude>_</test.exclude>
     <test.exclude.pattern>_</test.exclude.pattern>
