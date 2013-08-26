@@ -61,7 +61,6 @@ import org.apache.hadoop.security.authorize.AccessControlList;
 import org.apache.hadoop.security.ssl.SSLFactory;
 import org.apache.hadoop.util.ReflectionUtils;
 import org.apache.hadoop.util.Shell;
-//import org.eclipse.jetty.io.Buffer;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.http.MimeTypes;
 import org.eclipse.jetty.server.HttpConfiguration;
@@ -70,8 +69,6 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
-//import org.eclipse.jetty.server.nio.SelectChannelConnector;
-//import org.eclipse.jetty.server.ssl.SslSocketConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.FilterHolder;
@@ -214,14 +211,6 @@ public class HttpServer implements FilterContainer {
       boolean findPort, Configuration conf, AccessControlList adminsAcl, 
       ServerConnector connector, String[] pathSpecs,
       Server server) throws IOException {
-//    int maxThreads = conf.getInt(HTTP_MAX_THREADS, -1);
-//    // If HTTP_MAX_THREADS is not configured, QueueThreadPool() will use the
-//    // default value (currently 250).
-//    QueuedThreadPool threadPool = maxThreads == -1 ?
-//        new QueuedThreadPool() : new QueuedThreadPool(maxThreads);
-//    threadPool.setDaemon(true);
-//
-//    webServer = new Server(threadPool);
     this.findPort = findPort;
     this.adminsAcl = adminsAcl;
     
@@ -331,16 +320,7 @@ public class HttpServer implements FilterContainer {
       // the same port with indeterminate routing of incoming requests to them
       conn.setReuseAddress(false);
     }
-    ret.setRequestHeaderSize(1024*64);
     return conn;
-
-//    SelectChannelConnector ret = new SelectChannelConnector();
-//    ret.setLowResourceMaxIdleTime(10000);
-//    ret.setAcceptQueueSize(128);
-//    ret.setResolveNames(false);
-//    ret.setUseDirectBuffers(false);
-//    ret.setRequestHeaderSize(1024*64);
-//    return ret;
   }
 
   @InterfaceAudience.Private
