@@ -20,6 +20,7 @@
 #include "exception.h"
 #include "jni_helper.h"
 
+#include <dlfcn.h>
 #include <stdio.h> 
 #include <string.h> 
 
@@ -442,10 +443,44 @@ static JNIEnv* getGlobalJNIEnv(void)
     jint rv = 0; 
     jint noVMs = 0;
     jthrowable jthr;
+    void *jvmHandle = NULL;
+    jint JNICALL (*getCreatedJavaJVMsPtr)(JavaVM **, jsize, jsize *);
+    getCreatedJavaJVMsPtr = NULL; 
+    jint JNICALL (*createJavaVMPtr)(JavaVM **, void **, void *);
+    createJavaVMPtr = NULL;
+    char *dlsym_error = NULL;
 
-    rv = JNI_GetCreatedJavaVMs(&(vmBuf[0]), vmBufLength, &noVMs);
+    //Get JAVA_HOME to use appropriate libjvm
+    char *javaHome = getenv("JAVA_HOME");
+    if (javaHome == NULL) {
+        javaHome = "/usr/lib/jvm";
+    }
+
+    //Load the appropriate libjvm
+    char libjvmPath[strlen(javaHome)+35];
+    snprintf(libjvmPath, sizeof(libjvmPath), "%s/jre/lib/amd64/server/libjvm.so", javaHome);
+    jvmHandle = dlopen(libjvmPath, RTLD_NOW|RTLD_LOCAL);
+    if (jvmHandle == NULL) {
+        snprintf(libjvmPath, sizeof(libjvmPath), "%s/jre/lib/i386/server/libjvm.so", javaHome);
+        jvmHandle = dlopen(libjvmPath, RTLD_NOW|RTLD_LOCAL);
+        if (jvmHandle == NULL) {
+            fprintf(stderr, "Failed to load libjvm.so!\n");
+            return NULL;
+        }
+    }
+
+    //Load the JNI_GetCreatedJavaVMs function from the libjvm library
+    *(void **)(&getCreatedJavaJVMsPtr) = dlsym(jvmHandle, "JNI_GetCreatedJavaVMs");
+    dlsym_error = dlerror();
+    if (dlsym_error) {
+        fprintf(stderr, "Can not load symbol JNI_GetCreatedJavaVMs: %s\n", dlsym_error);
+        dlclose(jvmHandle);
+        return NULL;
+    }
+    rv = (*getCreatedJavaJVMsPtr)(&(vmBuf[0]), vmBufLength, &noVMs);
     if (rv != 0) {
         fprintf(stderr, "JNI_GetCreatedJavaVMs failed with error: %d\n", rv);
+        dlclose(jvmHandle);
         return NULL;
     }
 
@@ -454,6 +489,7 @@ static JNIEnv* getGlobalJNIEnv(void)
         char *hadoopClassPath = getenv("CLASSPATH");
         if (hadoopClassPath == NULL) {
             fprintf(stderr, "Environment variable CLASSPATH not set!\n");
+            dlclose(jvmHandle);
             return NULL;
         } 
         char *hadoopClassPathVMArg = "-Djava.class.path=";
@@ -502,7 +538,15 @@ static JNIEnv* getGlobalJNIEnv(void)
         vm_args.nOptions = noArgs; 
         vm_args.ignoreUnrecognized = 1;
 
-        rv = JNI_CreateJavaVM(&vm, (void*)&env, &vm_args);
+        //Load the JNI_CreateJavaVM function from the libjvm library
+        *(void **)(&createJavaVMPtr) = dlsym(jvmHandle, "JNI_CreateJavaVM");
+        dlsym_error = dlerror();
+        if (dlsym_error) {
+            fprintf(stderr, "Can not load symbol JNI_CreateJavaVM: %s\n", dlsym_error);
+            dlclose(jvmHandle);
+            return NULL;
+        }
+        rv = (*createJavaVMPtr)(&vm, (void*)&env, &vm_args);
 
         if (hadoopJvmArgs != NULL)  {
           free(hadoopJvmArgs);
@@ -512,6 +556,7 @@ static JNIEnv* getGlobalJNIEnv(void)
         if (rv != 0) {
             fprintf(stderr, "Call to JNI_CreateJavaVM failed "
                     "with error: %d\n", rv);
+            dlclose(jvmHandle);
             return NULL;
         }
         jthr = invokeMethod(env, NULL, STATIC, NULL,
