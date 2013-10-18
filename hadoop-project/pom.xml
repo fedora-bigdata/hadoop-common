@@ -690,9 +690,8 @@
       </dependency>
       <dependency>
         <groupId>org.apache.zookeeper</groupId>
-        <artifactId>zookeeper</artifactId>
+        <artifactId>zookeeper-test</artifactId>
         <version>3.4.5</version>
-        <type>test-jar</type>
         <scope>test</scope>
         <exclusions>
           <exclusion>

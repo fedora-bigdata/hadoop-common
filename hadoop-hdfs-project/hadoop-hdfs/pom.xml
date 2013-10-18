@@ -61,8 +61,7 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
     </dependency>
     <dependency>
       <groupId>org.apache.zookeeper</groupId>
-      <artifactId>zookeeper</artifactId>
-      <type>test-jar</type>
+      <artifactId>zookeeper-test</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
