@@ -83,7 +83,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.mortbay.log.Log;
+import org.eclipse.jetty.util.log.Log;
 
 public class TestAMRMClient {
   static Configuration conf = null;
@@ -436,7 +436,7 @@ public class TestAMRMClient {
       int iterationsLeft = 3;
       while (allocatedContainerCount < 2
           && iterationsLeft-- > 0) {
-        Log.info(" == alloc " + allocatedContainerCount + " it left " + iterationsLeft);
+        Log.getRootLogger().info(" == alloc " + allocatedContainerCount + " it left " + iterationsLeft);
         AllocateResponse allocResponse = amClient.allocate(0.1f);
         assertTrue(amClient.ask.size() == 0);
         assertTrue(amClient.release.size() == 0);
@@ -604,7 +604,7 @@ public class TestAMRMClient {
       throws YarnException, IOException {
     int allocatedContainerCount = 0;
     while (iterationsLeft-- > 0) {
-      Log.info(" == alloc " + allocatedContainerCount + " it left " + iterationsLeft);
+      Log.getRootLogger().info(" == alloc " + allocatedContainerCount + " it left " + iterationsLeft);
       AllocateResponse allocResponse = amClient.allocate(0.1f);
       assertTrue(amClient.ask.size() == 0);
       assertTrue(amClient.release.size() == 0);
