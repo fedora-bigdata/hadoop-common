@@ -284,11 +284,6 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
             <version>1.4.1</version>
           </dependency>
           <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-            <version>1.4.1</version>
-          </dependency>
-          <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-jasper</artifactId>
             <version>7.0.37</version>
