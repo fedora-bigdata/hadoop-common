@@ -30,7 +30,7 @@ import org.apache.hadoop.hdfs.server.namenode.FSNamesystem;
 import org.apache.hadoop.hdfs.server.protocol.DatanodeRegistration;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mortbay.log.Log;
+import org.eclipse.jetty.util.log.Log;
 
 import static org.junit.Assert.*;
 
@@ -57,7 +57,7 @@ public class TestDatanodeManager {
     Random rng = new Random();
     int seed = rng.nextInt();
     rng = new Random(seed);
-    Log.info("Using seed " + seed + " for testing");
+    Log.getRootLogger().info("Using seed " + seed + " for testing");
 
     //A map of the Storage IDs to the DN registration it was registered with
     HashMap <String, DatanodeRegistration> sIdToDnReg =
@@ -76,7 +76,7 @@ public class TestDatanodeManager {
           it.next();
         }
         DatanodeRegistration toRemove = it.next().getValue();
-        Log.info("Removing node " + toRemove.getStorageID() + " ip " +
+        Log.getRootLogger().info("Removing node " + toRemove.getStorageID() + " ip " +
         toRemove.getXferAddr() + " version : " + toRemove.getSoftwareVersion());
 
         //Remove that random node
@@ -110,7 +110,7 @@ public class TestDatanodeManager {
         Mockito.when(dr.getSoftwareVersion()).thenReturn(
           "version" + rng.nextInt(5));
 
-        Log.info("Registering node storageID: " + dr.getStorageID() +
+        Log.getRootLogger().info("Registering node storageID: " + dr.getStorageID() +
           ", version: " + dr.getSoftwareVersion() + ", IP address: "
           + dr.getXferAddr());
 
@@ -136,7 +136,7 @@ public class TestDatanodeManager {
         }
       }
       for(Entry <String, Integer> entry: mapToCheck.entrySet()) {
-        Log.info("Still in map: " + entry.getKey() + " has "
+        Log.getRootLogger().info("Still in map: " + entry.getKey() + " has "
           + entry.getValue());
       }
       assertEquals("The map of version counts returned by DatanodeManager was"

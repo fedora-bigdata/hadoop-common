@@ -39,7 +39,7 @@ import org.apache.hadoop.hdfs.server.datanode.DatanodeJspHelper;
 import org.apache.hadoop.io.IOUtils;
 import org.apache.hadoop.security.UserGroupInformation;
 import org.apache.hadoop.util.ServletUtil;
-import org.mortbay.jetty.InclusiveByteRange;
+import org.eclipse.jetty.server.InclusiveByteRange;
 
 @InterfaceAudience.Private
 public class StreamFile extends DfsServlet {

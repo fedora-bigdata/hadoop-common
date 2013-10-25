@@ -30,7 +30,7 @@ import org.apache.hadoop.security.token.Token;
 import org.apache.hadoop.security.token.TokenIdentifier;
 import org.apache.hadoop.util.DataChecksum;
 import org.apache.hadoop.util.StringUtils;
-import org.mortbay.util.ajax.JSON;
+import org.eclipse.jetty.util.ajax.JSON;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
