@@ -136,7 +136,7 @@ public class TestHsWebServicesJobsQuery extends JerseyTest {
     assertEquals(MediaType.APPLICATION_JSON_TYPE, response.getType());
     JSONObject json = response.getEntity(JSONObject.class);
     assertEquals("incorrect number of elements", 1, json.length());
-    assertEquals("jobs is not null", JSONObject.NULL, json.get("jobs"));
+    assertEquals("jobs is not None", 0, json.getJSONObject("jobs").length());
   }
 
   @Test
@@ -202,7 +202,7 @@ public class TestHsWebServicesJobsQuery extends JerseyTest {
     assertEquals(MediaType.APPLICATION_JSON_TYPE, response.getType());
     JSONObject json = response.getEntity(JSONObject.class);
     assertEquals("incorrect number of elements", 1, json.length());
-    assertEquals("jobs is not null", JSONObject.NULL, json.get("jobs"));
+    assertEquals("jobs is not None", 0, json.getJSONObject("jobs").length());
   }
 
   @Test
@@ -287,7 +287,7 @@ public class TestHsWebServicesJobsQuery extends JerseyTest {
     assertEquals(MediaType.APPLICATION_JSON_TYPE, response.getType());
     JSONObject json = response.getEntity(JSONObject.class);
     assertEquals("incorrect number of elements", 1, json.length());
-    assertEquals("jobs is not null", JSONObject.NULL, json.get("jobs"));
+    assertEquals("jobs is not None", 0, json.getJSONObject("jobs").length());
   }
 
   @Test
@@ -319,7 +319,7 @@ public class TestHsWebServicesJobsQuery extends JerseyTest {
     assertEquals(MediaType.APPLICATION_JSON_TYPE, response.getType());
     JSONObject json = response.getEntity(JSONObject.class);
     assertEquals("incorrect number of elements", 1, json.length());
-    assertEquals("jobs is not null", JSONObject.NULL, json.get("jobs"));
+    assertEquals("jobs is not None", 0, json.getJSONObject("jobs").length());
   }
 
   @Test
@@ -639,7 +639,7 @@ public class TestHsWebServicesJobsQuery extends JerseyTest {
     assertEquals(MediaType.APPLICATION_JSON_TYPE, response.getType());
     JSONObject json = response.getEntity(JSONObject.class);
     assertEquals("incorrect number of elements", 1, json.length());
-    assertEquals("jobs is not null", JSONObject.NULL, json.get("jobs"));
+    assertEquals("jobs is not None", 0, json.getJSONObject("jobs").length());
   }
 
   @Test
