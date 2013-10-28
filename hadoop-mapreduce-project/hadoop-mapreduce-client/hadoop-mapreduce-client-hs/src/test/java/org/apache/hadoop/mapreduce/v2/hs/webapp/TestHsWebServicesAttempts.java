@@ -123,7 +123,7 @@ public class TestHsWebServicesAttempts extends JerseyTest {
   public TestHsWebServicesAttempts() {
     super(new WebAppDescriptor.Builder(
         "org.apache.hadoop.mapreduce.v2.hs.webapp")
-        .contextListenerClass(GuiceServletConfig.class)
+        //.contextListenerClass(GuiceServletConfig.class)
         .filterClass(com.google.inject.servlet.GuiceFilter.class)
         .contextPath("jersey-guice-filter").servletPath("/").build());
   }

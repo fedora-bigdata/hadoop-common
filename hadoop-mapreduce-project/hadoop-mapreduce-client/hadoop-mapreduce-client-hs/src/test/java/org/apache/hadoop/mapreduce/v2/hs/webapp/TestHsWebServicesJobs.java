@@ -120,7 +120,7 @@ public class TestHsWebServicesJobs extends JerseyTest {
   public TestHsWebServicesJobs() {
     super(new WebAppDescriptor.Builder(
         "org.apache.hadoop.mapreduce.v2.hs.webapp")
-        .contextListenerClass(GuiceServletConfig.class)
+        //.contextListenerClass(GuiceServletConfig.class)
         .filterClass(com.google.inject.servlet.GuiceFilter.class)
         .contextPath("jersey-guice-filter").servletPath("/").build());
   }
