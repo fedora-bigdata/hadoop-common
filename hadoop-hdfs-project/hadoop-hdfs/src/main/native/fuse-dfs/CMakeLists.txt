@@ -68,7 +68,6 @@ IF(FUSE_FOUND)
     )
     target_link_libraries(fuse_dfs
         ${FUSE_LIBRARIES}
-        ${JAVA_JVM_LIBRARY}
         hdfs
         m
         pthread
