@@ -166,8 +166,8 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>tomcat</groupId>
-      <artifactId>jasper-runtime</artifactId>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>tomcat-jasper</artifactId>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -275,8 +275,38 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
         <dependencies>
           <dependency>
             <groupId>org.codehaus.mojo.jspc</groupId>
-            <artifactId>jspc-compiler-tomcat5</artifactId>
+            <artifactId>jspc-compiler-tomcat6</artifactId>
             <version>2.0-alpha-3</version>
+            <exclusions>
+              <exclusion>
+                <groupId>org.apache.tomcat</groupId>
+                <artifactId>jasper</artifactId>
+               </exclusion>
+               <exclusion>
+                 <groupId>org.apache.tomcat</groupId>
+                 <artifactId>jasper-el</artifactId>
+                </exclusion>
+                <exclusion>
+                  <groupId>org.apache.tomcat</groupId>
+                  <artifactId>jasper-jdt</artifactId>
+                </exclusion>
+                <exclusion>
+                  <groupId>org.apache.tomcat</groupId>
+                  <artifactId>servlet-api</artifactId>
+                </exclusion>
+                <exclusion>
+                  <groupId>org.apache.tomcat</groupId>
+                  <artifactId>jsp-api</artifactId>
+                </exclusion>
+                <exclusion>
+                  <groupId>org.apache.tomcat</groupId>
+                  <artifactId>el-api</artifactId>
+                </exclusion>
+                <exclusion>
+                <groupId>org.apache.tomcat</groupId>
+                <artifactId>annotations-api</artifactId>
+              </exclusion>
+            </exclusions>
           </dependency>
           <dependency>
             <groupId>org.slf4j</groupId>
@@ -284,9 +314,9 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
             <version>1.4.1</version>
           </dependency>
           <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl104-over-slf4j</artifactId>
-            <version>1.4.1</version>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jasper</artifactId>
+            <version>7.0.37</version>
           </dependency>
         </dependencies>
       </plugin>
