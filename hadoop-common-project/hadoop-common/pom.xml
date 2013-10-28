@@ -92,13 +92,31 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>org.mortbay.jetty</groupId>
-      <artifactId>jetty</artifactId>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-server</artifactId>
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>org.mortbay.jetty</groupId>
+      <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-util</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-util-ajax</artifactId>
+      <version>9.0.4.v20130625</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-servlet</artifactId>
+      <version>9.0.4.v20130625</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-webapp</artifactId>
+      <version>9.0.4.v20130625</version>
       <scope>compile</scope>
     </dependency>
 
@@ -123,6 +141,10 @@
       <artifactId>jersey-servlet</artifactId>
       <scope>compile</scope>
     </dependency>
+    <dependency>
+        <groupId>org.glassfish.web</groupId>
+        <artifactId>javax.servlet.jsp</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>org.apache.tomcat</groupId>
@@ -130,9 +152,14 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>javax.servlet.jsp</groupId>
-      <artifactId>jsp-api</artifactId>
-      <scope>runtime</scope>
+        <groupId>org.apache.tomcat</groupId>
+        <artifactId>tomcat-servlet-api</artifactId>
+        <version>7.0.37</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.tomcat</groupId>
+        <artifactId>tomcat-el-api</artifactId>
+        <version>7.0.37</version>
     </dependency>
     <dependency>
       <groupId>commons-el</groupId>

@@ -86,7 +86,7 @@ import org.apache.hadoop.security.token.TokenIdentifier;
 import org.apache.hadoop.util.*;
 import org.apache.hadoop.util.DiskChecker.DiskErrorException;
 import org.apache.hadoop.util.DiskChecker.DiskOutOfSpaceException;
-import org.mortbay.util.ajax.JSON;
+import org.eclipse.jetty.util.ajax.JSON;
 
 import java.io.*;
 import java.net.*;
@@ -307,7 +307,7 @@ public class DataNode extends Configured
            conf, new AccessControlList(conf.get(DFS_ADMIN, " ")))
        : new HttpServer("datanode", infoHost, tmpInfoPort, tmpInfoPort == 0,
            conf, new AccessControlList(conf.get(DFS_ADMIN, " ")),
-           secureResources.getListener());
+           secureResources.getListener(), null, secureResources.getServer());
 
     LOG.info("Opened info server at " + infoHost + ":" + tmpInfoPort);
     if (conf.getBoolean(DFS_HTTPS_ENABLE_KEY, false)) {
