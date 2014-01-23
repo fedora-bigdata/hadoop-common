@@ -68,7 +68,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Range;
-import com.google.common.collect.Ranges;
 import com.google.protobuf.TextFormat;
 
 /**
@@ -853,7 +852,7 @@ public class Journal implements Closeable {
   private Range<Long> txnRange(SegmentStateProto seg) {
     Preconditions.checkArgument(seg.hasEndTxId(),
         "invalid segment: %s", seg);
-    return Ranges.closed(seg.getStartTxId(), seg.getEndTxId());
+    return Range.closed(seg.getStartTxId(), seg.getEndTxId());
   }
 
   /**
