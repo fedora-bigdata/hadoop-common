@@ -38,12 +38,10 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <dependencyManagement>
     <dependencies>
-      <!-- This is a really old version of netty, that gets privatized
-           via shading and hence it is not managed via a parent pom -->
       <dependency>
         <groupId>org.jboss.netty</groupId>
         <artifactId>netty</artifactId>
-        <version>3.2.4.Final</version>
+        <version>3.6.6.Final</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
