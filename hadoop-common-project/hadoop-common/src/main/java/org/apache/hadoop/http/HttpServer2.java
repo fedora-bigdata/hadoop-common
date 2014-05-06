@@ -392,7 +392,8 @@ public final class HttpServer2 implements FilterContainer {
 
     addDefaultApps(contexts, appDir, conf);
 
-    addGlobalFilter("safety", QuotingInputFilter.class.getName(), null);
+    HashMap<String,String> empty = new HashMap<String,String>(0);
+    addGlobalFilter("safety", QuotingInputFilter.class.getName(), empty);
     final FilterInitializer[] initializers = getFilterInitializers(conf);
     if (initializers != null) {
       conf = new Configuration(conf);
