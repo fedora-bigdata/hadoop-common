@@ -307,7 +307,7 @@ public class TestHttpServer extends HttpServerFunctionalTest {
 
     @Override
     public void initFilter(FilterContainer container, Configuration conf) {
-      container.addFilter("DummyFilter", DummyServletFilter.class.getName(), null);
+      container.addFilter("DummyFilter", DummyServletFilter.class.getName(), new HashMap<String,String>(0));
     }
   }
 
