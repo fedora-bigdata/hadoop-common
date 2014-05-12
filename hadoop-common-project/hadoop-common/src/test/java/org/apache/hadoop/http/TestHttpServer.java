@@ -61,10 +61,11 @@ import org.apache.hadoop.security.authorize.AccessControlList;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import static org.junit.matchers.JUnitMatchers.*;
 import org.mockito.Mockito;
 import org.mockito.internal.util.reflection.Whitebox;
-import org.mortbay.jetty.Connector;
-import org.mortbay.util.ajax.JSON;
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.util.ajax.JSON;
 
 import static org.mockito.Mockito.*;
 
@@ -243,7 +244,7 @@ public class TestHttpServer extends HttpServerFunctionalTest {
     conn = (HttpURLConnection)servletUrl.openConnection();
     conn.connect();
     assertEquals(200, conn.getResponseCode());
-    assertEquals("text/plain; charset=utf-8", conn.getContentType());
+    assertThat(conn.getContentType().toLowerCase(),both(containsString("text/plain")).and(containsString("charset=utf-8")));
 
     // We should ignore parameters for mime types - ie a parameter
     // ending in .css should not change mime type
@@ -251,21 +252,21 @@ public class TestHttpServer extends HttpServerFunctionalTest {
     conn = (HttpURLConnection)servletUrl.openConnection();
     conn.connect();
     assertEquals(200, conn.getResponseCode());
-    assertEquals("text/plain; charset=utf-8", conn.getContentType());
+    assertThat(conn.getContentType().toLowerCase(),both(containsString("text/plain")).and(containsString("charset=utf-8")));
 
     // Servlets that specify text/html should get that content type
     servletUrl = new URL(baseUrl, "/htmlcontent");
     conn = (HttpURLConnection)servletUrl.openConnection();
     conn.connect();
     assertEquals(200, conn.getResponseCode());
-    assertEquals("text/html; charset=utf-8", conn.getContentType());
+    assertThat(conn.getContentType().toLowerCase(),both(containsString("text/html")).and(containsString("charset=utf-8")));
 
     // JSPs should default to text/html with utf8
     servletUrl = new URL(baseUrl, "/testjsp.jsp");
     conn = (HttpURLConnection)servletUrl.openConnection();
     conn.connect();
     assertEquals(200, conn.getResponseCode());
-    assertEquals("text/html; charset=utf-8", conn.getContentType());
+    assertThat(conn.getContentType().toLowerCase(),both(containsString("text/html")).and(containsString("charset=utf-8")));
   }
 
   /**

@@ -14,11 +14,12 @@
 package org.apache.hadoop.security.authentication.client;
 
 import org.apache.hadoop.security.authentication.server.AuthenticationFilter;
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.servlet.Context;
-import org.mortbay.jetty.servlet.FilterHolder;
-import org.mortbay.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.FilterHolder;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 
+import javax.servlet.DispatcherType;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -35,13 +36,14 @@ import java.net.HttpURLConnection;
 import java.net.ServerSocket;
 import java.net.URL;
 import java.util.Properties;
+import java.util.EnumSet;
 import org.junit.Assert;
 
 public class AuthenticatorTestCase {
   private Server server;
   private String host = null;
   private int port = -1;
-  Context context;
+  ServletContextHandler context;
 
   private static Properties authenticatorConfig;
 
@@ -82,10 +84,10 @@ public class AuthenticatorTestCase {
 
   protected void start() throws Exception {
     server = new Server(0);
-    context = new Context();
+    context = new ServletContextHandler();
     context.setContextPath("/foo");
     server.setHandler(context);
-    context.addFilter(new FilterHolder(TestFilter.class), "/*", 0);
+    context.addFilter(new FilterHolder(TestFilter.class), "/*", EnumSet.of(DispatcherType.REQUEST));
     context.addServlet(new ServletHolder(TestServlet.class), "/bar");
     host = "localhost";
     ServerSocket ss = new ServerSocket(0);
