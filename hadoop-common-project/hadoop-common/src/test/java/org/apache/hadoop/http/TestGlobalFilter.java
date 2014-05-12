@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.HashMap;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -75,7 +76,7 @@ public class TestGlobalFilter extends HttpServerFunctionalTest {
 
       @Override
       public void initFilter(FilterContainer container, Configuration conf) {
-        container.addGlobalFilter("recording", RecordingFilter.class.getName(), null);
+        container.addGlobalFilter("recording", RecordingFilter.class.getName(), new HashMap<String,String>(0));
       }
     }
   }

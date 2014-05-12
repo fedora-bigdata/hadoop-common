@@ -265,9 +265,9 @@ public class WebApps {
         for(Map.Entry<String, Object> entry : attributes.entrySet()) {
           server.setAttribute(entry.getKey(), entry.getValue());
         }
-        HashMap<String,String> empty = new HashMap<String,String>(0);
         HttpServer2.defineFilter(server.getWebAppContext(), "guice",
-          GuiceFilter.class.getName(), empty, new String[] { "/*" });
+          GuiceFilter.class.getName(), new HashMap<String,String>(0),
+           new String[] { "/*" });
 
         webapp.setConf(conf);
         webapp.setHttpServer(server);
