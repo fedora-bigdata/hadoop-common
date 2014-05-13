@@ -99,7 +99,6 @@ if (NEED_LINK_DL)
 endif(NEED_LINK_DL)
 
 target_link_dual_libraries(hdfs
-    ${JAVA_JVM_LIBRARY}
     ${LIB_DL}
     pthread
 )
