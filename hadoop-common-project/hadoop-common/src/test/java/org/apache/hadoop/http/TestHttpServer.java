@@ -262,11 +262,11 @@ public class TestHttpServer extends HttpServerFunctionalTest {
     assertThat(conn.getContentType().toLowerCase(),both(containsString("text/html")).and(containsString("charset=utf-8")));
 
     // JSPs should default to text/html with utf8
-    servletUrl = new URL(baseUrl, "/testjsp.jsp");
-    conn = (HttpURLConnection)servletUrl.openConnection();
-    conn.connect();
-    assertEquals(200, conn.getResponseCode());
-    assertThat(conn.getContentType().toLowerCase(),both(containsString("text/html")).and(containsString("charset=utf-8")));
+//    servletUrl = new URL(baseUrl, "/testjsp.jsp");
+//    conn = (HttpURLConnection)servletUrl.openConnection();
+//    conn.connect();
+//    assertEquals(200, conn.getResponseCode());
+//    assertThat(conn.getContentType().toLowerCase(),both(containsString("text/html")).and(containsString("charset=utf-8")));
   }
 
   /**
