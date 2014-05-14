@@ -50,7 +50,7 @@ import org.apache.hadoop.io.IOUtils;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.io.LimitInputStream;
+import com.google.common.io.ByteStreams;
 
 /**
  * LsrPBImage displays the blocks of the namespace in a format very similar
@@ -110,7 +110,7 @@ final class LsrPBImage {
       for (FileSummary.Section s : sections) {
         fin.getChannel().position(s.getOffset());
         InputStream is = FSImageUtil.wrapInputStreamForCompression(conf,
-            summary.getCodec(), new BufferedInputStream(new LimitInputStream(
+            summary.getCodec(), new BufferedInputStream(ByteStreams.limit(
                 fin, s.getLength())));
 
         switch (SectionName.fromString(s.getName())) {
