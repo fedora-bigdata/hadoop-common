@@ -62,7 +62,7 @@ import org.apache.hadoop.io.compress.CompressorStream;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.io.LimitInputStream;
+import com.google.common.io.ByteStreams;
 import com.google.protobuf.CodedOutputStream;
 
 /**
@@ -215,7 +215,7 @@ public final class FSImageFormatProtobuf {
 
       for (FileSummary.Section s : sections) {
         channel.position(s.getOffset());
-        InputStream in = new BufferedInputStream(new LimitInputStream(fin,
+        InputStream in = new BufferedInputStream(ByteStreams.limit(fin,
             s.getLength()));
 
         in = FSImageUtil.wrapInputStreamForCompression(conf,

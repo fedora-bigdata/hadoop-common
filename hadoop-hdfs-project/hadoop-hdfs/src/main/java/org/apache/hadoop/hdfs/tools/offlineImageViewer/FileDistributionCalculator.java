@@ -33,7 +33,7 @@ import org.apache.hadoop.hdfs.server.namenode.FsImageProto.INodeSection;
 import org.apache.hadoop.io.IOUtils;
 
 import com.google.common.base.Preconditions;
-import com.google.common.io.LimitInputStream;
+import com.google.common.io.ByteStreams;
 
 /**
  * This is the tool for analyzing file sizes in the namespace image. In order to
@@ -106,7 +106,7 @@ final class FileDistributionCalculator {
 
         in.getChannel().position(s.getOffset());
         InputStream is = FSImageUtil.wrapInputStreamForCompression(conf,
-            summary.getCodec(), new BufferedInputStream(new LimitInputStream(
+            summary.getCodec(), new BufferedInputStream(ByteStreams.limit(
                 in, s.getLength())));
         run(is);
         output();

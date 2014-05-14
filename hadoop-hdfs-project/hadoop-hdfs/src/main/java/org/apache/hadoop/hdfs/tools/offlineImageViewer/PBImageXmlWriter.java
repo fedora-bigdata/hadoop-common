@@ -52,7 +52,7 @@ import org.apache.hadoop.hdfs.server.namenode.FsImageProto.StringTableSection;
 import org.apache.hadoop.io.IOUtils;
 
 import com.google.common.collect.Lists;
-import com.google.common.io.LimitInputStream;
+import com.google.common.io.ByteStreams;
 
 /**
  * PBImageXmlWriter walks over an fsimage structure and writes out
@@ -100,7 +100,7 @@ public final class PBImageXmlWriter {
       for (FileSummary.Section s : sections) {
         fin.getChannel().position(s.getOffset());
         InputStream is = FSImageUtil.wrapInputStreamForCompression(conf,
-            summary.getCodec(), new BufferedInputStream(new LimitInputStream(
+            summary.getCodec(), new BufferedInputStream(ByteStreams.limit(
                 fin, s.getLength())));
 
         switch (SectionName.fromString(s.getName())) {
