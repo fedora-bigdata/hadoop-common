@@ -27,6 +27,7 @@ import java.io.File;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileUtil;
@@ -325,11 +326,11 @@ public class TestJournalNode {
     ch.setEpoch(1);
     ch.startLogSegment(1, NameNodeLayoutVersion.CURRENT_LAYOUT_VERSION).get();
     
-    Stopwatch sw = new Stopwatch().start();
+    Stopwatch sw = Stopwatch.createStarted();
     for (int i = 1; i < numEdits; i++) {
       ch.sendEdits(1L, i, 1, data).get();
     }
-    long time = sw.elapsedMillis();
+    long time = sw.elapsed(TimeUnit.MILLISECONDS);
     
     System.err.println("Wrote " + numEdits + " batches of " + editsSize +
         " bytes in " + time + "ms");

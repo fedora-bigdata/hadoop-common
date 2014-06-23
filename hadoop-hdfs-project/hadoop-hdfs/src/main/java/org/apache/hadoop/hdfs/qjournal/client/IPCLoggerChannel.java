@@ -133,7 +133,7 @@ public class IPCLoggerChannel implements AsyncLogger {
   /**
    * Stopwatch which starts counting on each heartbeat that is sent
    */
-  private final Stopwatch lastHeartbeatStopwatch = new Stopwatch();
+  private final Stopwatch lastHeartbeatStopwatch = Stopwatch.createUnstarted();
   
   private static final long HEARTBEAT_INTERVAL_MILLIS = 1000;
 
@@ -435,7 +435,7 @@ public class IPCLoggerChannel implements AsyncLogger {
    * written.
    */
   private void heartbeatIfNecessary() throws IOException {
-    if (lastHeartbeatStopwatch.elapsedMillis() > HEARTBEAT_INTERVAL_MILLIS ||
+    if (lastHeartbeatStopwatch.elapsed(TimeUnit.MILLISECONDS) > HEARTBEAT_INTERVAL_MILLIS ||
         !lastHeartbeatStopwatch.isRunning()) {
       try {
         getProxy().heartbeat(createReqInfo());

@@ -373,15 +373,15 @@ public class Journal implements Closeable {
     
     curSegment.writeRaw(records, 0, records.length);
     curSegment.setReadyToFlush();
-    Stopwatch sw = new Stopwatch();
+    Stopwatch sw = Stopwatch.createUnstarted();
     sw.start();
     curSegment.flush(shouldFsync);
     sw.stop();
     
-    metrics.addSync(sw.elapsedTime(TimeUnit.MICROSECONDS));
-    if (sw.elapsedTime(TimeUnit.MILLISECONDS) > WARN_SYNC_MILLIS_THRESHOLD) {
+    metrics.addSync(sw.elapsed(TimeUnit.MICROSECONDS));
+    if (sw.elapsed(TimeUnit.MILLISECONDS) > WARN_SYNC_MILLIS_THRESHOLD) {
       LOG.warn("Sync of transaction range " + firstTxnId + "-" + lastTxnId +
-               " took " + sw.elapsedTime(TimeUnit.MILLISECONDS) + "ms");
+               " took " + sw.elapsed(TimeUnit.MILLISECONDS) + "ms");
     }
 
     if (isLagging) {
