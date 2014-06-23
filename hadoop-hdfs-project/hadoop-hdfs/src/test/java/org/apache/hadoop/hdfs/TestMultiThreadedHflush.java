@@ -100,10 +100,10 @@ public class TestMultiThreadedHflush {
     }
 
     private void doAWrite() throws IOException {
-      Stopwatch sw = new Stopwatch().start();
+      Stopwatch sw = Stopwatch.createStarted();
       stm.write(toWrite);
       stm.hflush();
-      long micros = sw.elapsedTime(TimeUnit.MICROSECONDS);
+      long micros = sw.elapsed(TimeUnit.MICROSECONDS);
       quantiles.insert(micros);
     }
   }
@@ -276,12 +276,12 @@ public class TestMultiThreadedHflush {
       int replication = conf.getInt(DFSConfigKeys.DFS_REPLICATION_KEY,
           DFSConfigKeys.DFS_REPLICATION_DEFAULT);
       
-      Stopwatch sw = new Stopwatch().start();
+      Stopwatch sw = Stopwatch.createStarted();
       test.doMultithreadedWrites(conf, p, numThreads, writeSize, numWrites,
           replication);
       sw.stop();
   
-      System.out.println("Finished in " + sw.elapsedMillis() + "ms");
+      System.out.println("Finished in " + sw.elapsed(TimeUnit.MILLISECONDS) + "ms");
       System.out.println("Latency quantiles (in microseconds):\n" +
           test.quantiles);
       return 0;
