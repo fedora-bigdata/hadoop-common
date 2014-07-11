@@ -43,6 +43,7 @@ import org.apache.hadoop.yarn.webapp.YarnWebParams;
 import org.apache.hadoop.yarn.webapp.hamlet.Hamlet;
 import org.apache.hadoop.yarn.webapp.hamlet.Hamlet.PRE;
 import org.apache.hadoop.yarn.webapp.view.HtmlBlock;
+import org.eclipse.jetty.util.log.Log;
 
 import com.google.inject.Inject;
 

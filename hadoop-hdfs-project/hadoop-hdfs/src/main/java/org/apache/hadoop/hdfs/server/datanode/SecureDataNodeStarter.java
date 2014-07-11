@@ -30,9 +30,10 @@ import org.apache.hadoop.hdfs.server.common.HdfsServerConstants;
 import org.apache.hadoop.http.HttpConfig;
 import org.apache.hadoop.http.HttpServer2;
 import org.apache.hadoop.security.UserGroupInformation;
-import org.mortbay.jetty.Connector;
+import org.eclipse.jetty.server.Connector;
 
 import com.google.common.annotations.VisibleForTesting;
+
 
 /**
  * Utility class to start a datanode in a secure cluster, first obtaining 

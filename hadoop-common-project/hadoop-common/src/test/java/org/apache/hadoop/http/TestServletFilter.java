@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.HashMap;
 import java.util.Random;
 
 import javax.servlet.Filter;
@@ -74,7 +75,7 @@ public class TestServletFilter extends HttpServerFunctionalTest {
 
       @Override
       public void initFilter(FilterContainer container, Configuration conf) {
-        container.addFilter("simple", SimpleFilter.class.getName(), null);
+        container.addFilter("simple", SimpleFilter.class.getName(), new HashMap<String,String>(0));
       }
     }
   }
@@ -157,7 +158,7 @@ public class TestServletFilter extends HttpServerFunctionalTest {
       }
 
       public void initFilter(FilterContainer container, Configuration conf) {
-        container.addFilter("simple", ErrorFilter.class.getName(), null);
+        container.addFilter("simple", ErrorFilter.class.getName(), new HashMap<String,String>(0));
       }
     }
   }
@@ -173,8 +174,7 @@ public class TestServletFilter extends HttpServerFunctionalTest {
       http.start();
       fail("expecting exception");
     } catch (IOException e) {
-      assertTrue(e.getMessage().contains(
-          "Problem in starting http server. Server handlers failed"));
+      assertTrue(e.getMessage().toLowerCase().contains("problem"));
     }
   }
   
@@ -189,7 +189,7 @@ public class TestServletFilter extends HttpServerFunctionalTest {
     HttpServer2 http = createTestServer(conf);
     HttpServer2.defineFilter(http.webAppContext,
         "ErrorFilter", ErrorFilter.class.getName(),
-        null, null);
+        new HashMap<String,String>(0), null);
     try {
       http.start();
       fail("expecting exception");

@@ -43,7 +43,7 @@ import org.apache.hadoop.yarn.server.api.records.NodeStatus;
 import org.apache.hadoop.yarn.server.utils.BuilderUtils;
 import org.apache.hadoop.yarn.util.Records;
 import org.apache.hadoop.yarn.util.YarnVersionInfo;
-import org.mortbay.log.Log;
+import org.eclipse.jetty.util.log.Log;
 
 public class MockNM {
 

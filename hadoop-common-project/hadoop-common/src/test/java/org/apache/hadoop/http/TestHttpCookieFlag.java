@@ -36,6 +36,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.security.GeneralSecurityException;
+import java.util.HashMap;
 
 public class TestHttpCookieFlag {
   private static final String BASEDIR = System.getProperty("test.build.dir",
@@ -70,7 +71,7 @@ public class TestHttpCookieFlag {
     @Override
     public void initFilter(FilterContainer container, Configuration conf) {
       container.addFilter("DummyAuth", DummyAuthenticationFilter.class
-              .getName(), null);
+              .getName(), new HashMap<String,String>(0));
     }
   }
 
