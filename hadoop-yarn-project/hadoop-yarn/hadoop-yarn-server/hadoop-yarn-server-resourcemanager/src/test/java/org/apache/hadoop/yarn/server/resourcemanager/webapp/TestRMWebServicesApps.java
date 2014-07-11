@@ -376,7 +376,7 @@ public class TestRMWebServicesApps extends JerseyTest {
     assertEquals(MediaType.APPLICATION_JSON_TYPE, response.getType());
     JSONObject json = response.getEntity(JSONObject.class);
     assertEquals("incorrect number of elements", 1, json.length());
-    assertEquals("apps is not null", JSONObject.NULL, json.get("apps"));
+    assertEquals("apps is not None", 0, json.getJSONObject("apps").length());
     rm.stop();
   }
 
@@ -491,7 +491,7 @@ public class TestRMWebServicesApps extends JerseyTest {
     assertEquals(MediaType.APPLICATION_JSON_TYPE, response.getType());
     JSONObject json = response.getEntity(JSONObject.class);
     assertEquals("incorrect number of elements", 1, json.length());
-    assertEquals("apps is not null", JSONObject.NULL, json.get("apps"));
+    assertEquals("apps is not None", 0, json.getJSONObject("apps").length());
     rm.stop();
   }
 
@@ -667,7 +667,7 @@ public class TestRMWebServicesApps extends JerseyTest {
     assertEquals(MediaType.APPLICATION_JSON_TYPE, response.getType());
     JSONObject json = response.getEntity(JSONObject.class);
     assertEquals("incorrect number of elements", 1, json.length());
-    assertEquals("apps is not null", JSONObject.NULL, json.get("apps"));
+    assertEquals("apps is not None", 0, json.getJSONObject("apps").length());
     rm.stop();
   }
 
