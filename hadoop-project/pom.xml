@@ -295,11 +295,13 @@
         <version>${project.version}</version>
       </dependency>
 
+<!--
       <dependency>
         <groupId>org.apache.hadoop</groupId>
         <artifactId>hadoop-minikdc</artifactId>
         <version>${project.version}</version>
       </dependency>
+-->
 
       <dependency>
         <groupId>org.apache.hadoop</groupId>
@@ -783,6 +785,24 @@
             <source>1.6</source>
             <target>1.6</target>
           </configuration>
+          <executions>
+            <execution>
+              <id>default-testCompile</id>
+              <phase>test-compile</phase>
+              <configuration>
+                <testExcludes>
+                  <exclude>**/TestKerberosAuthenticator.java</exclude>
+                  <exclude>**/TestKerberosAuthenticationHandler.java</exclude>
+                  <exclude>**/TestAltKerberosAuthenticationHandler.java</exclude>
+                  <exclude>**/TestKerberosAuthenticationHandler.java</exclude>
+                  <exclude>**/TestContainerManagerSecurity.java</exclude>
+                </testExcludes>
+              </configuration>
+              <goals>
+                <goal>testCompile</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
